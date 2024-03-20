@@ -4,6 +4,11 @@ from django.http import HttpResponse
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import secrets
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from M68.response import responce
+
 
 
 # Connect to MongoDB
@@ -33,7 +38,7 @@ def index(request):
     session_token = request.COOKIES.get('session_token')
 
     if is_valid_session_token(session_token):
-        return render(request, 'home.html')
+        return render(request, 'intelliAi.html')
     else:
         return render(request, 'landingPage.html')
 
@@ -50,7 +55,7 @@ def signup(request):
             expiry_date = datetime.now() + timedelta(days=1)
             user_data = {'name': name, 'email': email, 'password': password, 'session_token': session_token, 'expiry_date': expiry_date}
             collection.insert_one(user_data)
-            response = redirect('home')
+            response = redirect('intelliAi')
             response.set_cookie('session_token', session_token, expires=expiry_date)
 
             return response
@@ -69,7 +74,7 @@ def login(request):
             session_token = generate_session_token()
             expiry_date = datetime.now() + timedelta(days=1)
             collection.update_one({'email': email}, {'$set': {'session_token': session_token, 'expiry_date': expiry_date}})
-            response = render(request, 'home.html', {'user': user})
+            response = redirect('intelliAi')
             response.set_cookie('session_token', session_token, expires=expiry_date)
             
             return response
@@ -79,5 +84,16 @@ def login(request):
     else:
         return render(request, 'login.html')
 
-def home(request):
-    return render(request, 'home.html')
+def intelliAi(request):
+    return render(request, 'intelliAi.html')
+
+@csrf_exempt
+def ai_response(request):
+    print(request)
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        prompt = data.get('prompt', '')
+        ai_response = responce(prompt)
+        return JsonResponse({'message': ai_response})
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
