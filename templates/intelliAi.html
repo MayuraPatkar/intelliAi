@@ -88,31 +88,46 @@
         <div class="chat-box" id="chat-box">
             <div class="ai-message">Welcome to IntelliAI. How can I assist you?</div>
         </div>
-        <form id="user-input">
+        <form id="user-input" action="javascript:void(0)" enctype="multipart/form-data">
             <input type="text" id="user-message" placeholder="Type your message...">
-            <input type="file" id="image">
+            <input type="file" id="image" accept="image/*">
             <input type="submit" value="Send">
         </form>
+        <div id="profile">
+            <button id="logout">logout</button>
+            <button id="clear-data">clear data</button>
+            <button id="delete-account">delete account</button>
+        </div>
     </div>
 
     <script>
         const chatBox = document.getElementById('chat-box');
         const form = document.getElementById('user-input');
+        const logout = document.getElementById('logout');
+        const clearData = document.getElementById('clear-data');
+        const deleteAccount = document.getElementById('delete-account');
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             const prompt = document.getElementById('user-message').value.trim();
-            if (prompt !== '') {
-                appendMessage('user', prompt); 
-                sendPrompt(prompt);
+            const image = document.getElementById('image').files[0];
+
+            if (prompt !== '' || image) {
+                const formData = new FormData();
+                formData.append('prompt', prompt);
+                formData.append('image', image);
+
+                appendMessage('user', prompt);
+                sendPrompt(formData);
+
                 document.getElementById('user-message').value = '';
+                document.getElementById('image').value = '';
             }
         });
 
-        function sendPrompt(prompt) {
+        function sendPrompt(formData) {
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'https://gt7gd5tk-8000.inc1.devtunnels.ms/ai-response');
-            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
@@ -121,7 +136,7 @@
                     console.error('Request failed. Status: ' + xhr.status);
                 }
             };
-            xhr.send(JSON.stringify({ prompt: prompt }));
+            xhr.send(formData);
         }
 
         function appendMessage(sender, message) {
@@ -131,6 +146,51 @@
             chatBox.appendChild(messageElement);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        logout.addEventListener('click', function (event) {
+            event.preventDefault();
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:8000/logout/');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    window.location = "/";
+                } else {
+                    console.error('Request failed. Status: ' + xhr.status);
+                }
+            };
+            xhr.send();
+        });
+
+        clearData.addEventListener('click', function (event) {
+            event.preventDefault();
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                } else {
+                    console.error('Request failed. Status: ' + xhr.status);
+                }
+            };
+            xhr.send();
+        });
+
+        deleteAccount.addEventListener('click', function (event) {
+            event.preventDefault();
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    window.location = "/";
+                } else {
+                    console.error('Request failed. Status: ' + xhr.status);
+                }
+            };
+            xhr.send();
+        });
+
     </script>
 
 </body>

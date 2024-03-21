@@ -41,13 +41,15 @@ def responce(promt):
 
     tag = tags[predicted.item()]
 
-    probs = torch.softmax(output, dim=1)
-    prob = probs[0][predicted.item()]
-    if prob.item() > 0.75:
-        for intent in intents['intents']:
-            if tag == intent["tag"]:
-                responce = random.choice(intent['responses'])
+
+    if tag == 'greeting' :
+        probs = torch.softmax(output, dim=1)
+        prob = probs[0][predicted.item()]
+        if prob.item() > 0.75:
+            for intent in intents['intents']:
+                if tag == intent["tag"]:
+                    responce = random.choice(intent['responses'])
     else:
-        responce =" I do not understand..."
+        responce = ""
 
     return responce

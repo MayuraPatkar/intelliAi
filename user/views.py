@@ -97,3 +97,35 @@ def ai_response(request):
         return JsonResponse({'message': ai_response})
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def logout(request):
+    if request.method == 'POST':
+        try:
+            response = JsonResponse({'message': 'success'})
+            response.delete_cookie('session_token')
+            return response
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def deleteAccount(request):
+    if request.method == 'POST':
+        try:
+            response = JsonResponse({'message': 'success'})
+            response.delete_cookie('session_token')
+            return response
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def clearChat():
+    pass
