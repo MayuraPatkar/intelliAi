@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from M68.response import responce
+import hashlib
 
 
 
@@ -15,6 +16,11 @@ from M68.response import responce
 client = MongoClient('mongodb://localhost:27017/')
 db = client['intelliAi']
 collection = db['accounts']
+
+def hash_password(password):
+    # Hash the password using SHA-256 algorithm
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    return hashed_password
 
 
 def generate_session_token():
@@ -42,6 +48,9 @@ def index(request):
     else:
         return render(request, 'landingPage.html')
 
+def intelliAi(request):
+    return render(request, 'intelliAi.html')
+
 def signup(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -51,9 +60,10 @@ def signup(request):
         if collection.find_one({'email': email}):
             return render(request, 'signup.html', {'error_message': 'User already exists. Please log in.'})
         else:
+            hashed_password = hash_password(password)
             session_token = generate_session_token()
             expiry_date = datetime.now() + timedelta(days=1)
-            user_data = {'name': name, 'email': email, 'password': password, 'session_token': session_token, 'expiry_date': expiry_date}
+            user_data = {'name': name, 'email': email, 'password': hashed_password, 'session_token': session_token, 'expiry_date': expiry_date}
             collection.insert_one(user_data)
             response = redirect('intelliAi')
             response.set_cookie('session_token', session_token, expires=expiry_date)
@@ -63,14 +73,17 @@ def signup(request):
     else:
         return render(request, 'signup.html')
 
-
-def login(request):
+# Function to handle user login
+def user_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = collection.find_one({'email': email, 'password': password})
-        
+        hashed_password = hash_password(password)
+        print(hashed_password)
+        user = collection.find_one({'email': email, 'password': hashed_password})
+
         if user:
+            print(user)
             session_token = generate_session_token()
             expiry_date = datetime.now() + timedelta(days=1)
             collection.update_one({'email': email}, {'$set': {'session_token': session_token, 'expiry_date': expiry_date}})
@@ -80,12 +93,8 @@ def login(request):
             return response
         else:
             return render(request, 'login.html', {'error_message': 'Invalid email or password.'})
-
     else:
         return render(request, 'login.html')
-
-def intelliAi(request):
-    return render(request, 'intelliAi.html')
 
 @csrf_exempt
 def ai_response(request):
