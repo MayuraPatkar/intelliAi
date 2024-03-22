@@ -31,8 +31,8 @@ model.eval()
 
 
 def responce(promt, image=None):
-
-    if image != None:
+    print("promt: ",promt, "image: ",image)
+    if image:
         return image_response(image)
     
     sentence = tokenize(promt)
@@ -45,7 +45,6 @@ def responce(promt, image=None):
 
     tag = tags[predicted.item()]
 
-
     if tag == 'greeting' :
         probs = torch.softmax(output, dim=1)
         prob = probs[0][predicted.item()]
@@ -54,6 +53,6 @@ def responce(promt, image=None):
                 if tag == intent["tag"]:
                     responce = random.choice(intent['responses'])
     else:
-        responce = ""
+        responce = "i don't understand..."
 
     return responce

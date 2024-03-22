@@ -112,12 +112,13 @@
             const prompt = document.getElementById('user-message').value.trim();
             const image = document.getElementById('image').files[0];
 
-            if (prompt !== '' || image) {
+            if (prompt || image) {
                 const formData = new FormData();
                 formData.append('prompt', prompt);
                 formData.append('image', image);
 
                 appendMessage('user', prompt);
+                appendImage('user', image);
                 sendPrompt(formData);
 
                 document.getElementById('user-message').value = '';
@@ -146,6 +147,23 @@
             chatBox.appendChild(messageElement);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
+
+        function appendImage(sender, image) {
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const imageElement = document.createElement('img');
+                imageElement.classList.add(sender + '-message');
+                imageElement.src = event.target.result;
+                chatBox.appendChild(imageElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            };
+
+            reader.readAsDataURL(image);
+        }
+
+
+
 
         logout.addEventListener('click', function (event) {
             event.preventDefault();

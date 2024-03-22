@@ -13,13 +13,13 @@ def image_response(image):
     inputs = processor(raw_image, text, return_tensors="pt")
 
     out = model.generate(**inputs)
-    print(processor.decode(out[0], skip_special_tokens=True))
+    # print(processor.decode(out[0], skip_special_tokens=True))
 
     # unconditional image captioning
-    inputs = processor(raw_image, return_tensors="pt")
+    # inputs = processor(raw_image, return_tensors="pt")
 
-    out = model.generate(**inputs)
-    print(processor.decode(out[0], skip_special_tokens=True))
+    # out = model.generate(**inputs)
+    # print(processor.decode(out[0], skip_special_tokens=True))
 
     response = processor.decode(out[0], skip_special_tokens=True)
 

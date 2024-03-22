@@ -18,7 +18,7 @@ db = client['intelliAi']
 collection = db['accounts']
 
 def hash_password(password):
-    # Hash the password using SHA-256 algorithm
+    # SHA-256 algorithm
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
     return hashed_password
 
@@ -73,7 +73,7 @@ def signup(request):
     else:
         return render(request, 'signup.html')
 
-# Function to handle user login
+# login
 def user_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -99,9 +99,8 @@ def user_login(request):
 @csrf_exempt
 def ai_response(request):
     if request.method == 'POST':
-        data = request.POST
-        prompt = data.get('prompt', '')
-        image = data.get('image', '')
+        prompt = request.POST.get('prompt', '')
+        image = request.FILES.get('image', None)
         ai_response = responce(prompt, image)
         return JsonResponse({'message': ai_response})
     else:
