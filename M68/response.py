@@ -6,6 +6,7 @@ import torch
 
 from M68.model import NeuralNet
 from M68.preprocess import bag_of_words, tokenize
+from M68.modelVision import image_response
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,8 +30,11 @@ model.load_state_dict(model_state)
 model.eval()
 
 
-def responce(promt):
+def responce(promt, image=None):
 
+    if image != None:
+        return image_response(image)
+    
     sentence = tokenize(promt)
     X = bag_of_words(sentence, all_words)
     X = X.reshape(1, X.shape[0])

@@ -5,7 +5,7 @@ processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-larg
 model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-large")
 
 
-def response(image): 
+def image_response(image): 
     raw_image = Image.open(image).convert('RGB')
 
     # conditional image captioning

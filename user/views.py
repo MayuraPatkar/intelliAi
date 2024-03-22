@@ -98,11 +98,11 @@ def user_login(request):
 
 @csrf_exempt
 def ai_response(request):
-    print(request)
     if request.method == 'POST':
-        data = json.loads(request.body)
+        data = request.POST
         prompt = data.get('prompt', '')
-        ai_response = responce(prompt)
+        image = data.get('image', '')
+        ai_response = responce(prompt, image)
         return JsonResponse({'message': ai_response})
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
