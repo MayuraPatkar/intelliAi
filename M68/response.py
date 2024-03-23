@@ -30,11 +30,11 @@ model.load_state_dict(model_state)
 model.eval()
 
 
-def responce(promt, image=None):
+def responce(promt = None, image=None):
     print("promt: ",promt, "image: ",image)
     if image:
         return image_response(image)
-    
+
     sentence = tokenize(promt)
     X = bag_of_words(sentence, all_words)
     X = X.reshape(1, X.shape[0])

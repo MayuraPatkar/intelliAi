@@ -115,10 +115,12 @@
             if (prompt || image) {
                 const formData = new FormData();
                 formData.append('prompt', prompt);
-                formData.append('image', image);
+                if (image) {
+                    formData.append('image', image);
+                    appendImage('user', image);
+                }
 
                 appendMessage('user', prompt);
-                appendImage('user', image);
                 sendPrompt(formData);
 
                 document.getElementById('user-message').value = '';
