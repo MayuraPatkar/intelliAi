@@ -22,7 +22,7 @@ body::-webkit-scrollbar{
     position: fixed;
     justify-content: center;
     align-items: center;
-    top: 760px;
+    top: 800px;
     left: 760px;
     border: 2px solid #B6B6B6;
     border:none;
@@ -33,7 +33,7 @@ body::-webkit-scrollbar{
 .guestbutton{
     display: flex;
     position: fixed;
-    top: 860px;
+    top: 900px;
     left: 760px;
     border: 2px solid #B6B6B6;
     border:none;
@@ -60,7 +60,7 @@ a{
     border: 2px solid rgb(182, 182, 182,0.5);
     padding: 10px 25px;
     border-radius: 30px;
-    transition: 0.3s;
+    transition: 0.1s;
 }
 .guest{
     text-align: center;
@@ -72,7 +72,7 @@ a{
     background: none;
     font-size: 24px;
     text-decoration:underline;
-    transition: 0.3s;
+    transition: 0.1s;
 }
 .login{
     margin-right:20px;
@@ -96,7 +96,7 @@ a{
 
 /*Click effect*/
 
-.login , .sign-in, .guest:active{
+.login:active , .sign-in:active , .guest:active{
     opacity: 0.8;
 }
 
