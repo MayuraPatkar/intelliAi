@@ -91,6 +91,7 @@
         <form id="user-input" action="javascript:void(0)" enctype="multipart/form-data">
             <input type="text" id="user-message" placeholder="Type your message...">
             <input type="file" id="image" accept="image/*">
+            <button id="startBtn">Start Recording</button>
             <input type="submit" value="Send">
         </form>
         <div id="profile">
@@ -212,6 +213,31 @@
         });
 
     </script>
+
+    <script>
+        
+        const startBtn = document.getElementById('startBtn');
+        const userInput = document.getElementById('user-message');
+
+        const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+        recognition.lang = 'en-US';
+
+        recognition.onstart = function () {
+            console.log('Speech recognition started');
+        };
+
+        recognition.onresult = function (event) {
+            const result = event.results[event.resultIndex];
+            const transcript = result[0].transcript;
+            userInput.value = transcript;
+        };
+
+        startBtn.addEventListener('click', function () {
+            recognition.start();
+        });
+
+    </script>
+
 
 </body>
 
