@@ -4,10 +4,14 @@
     box-sizing: border-box;
     font-family: 'Pixelify sans';
 }
+
+/*Scrollbar-disabled*/
 body::-webkit-scrollbar{
     display: none;
 }
 
+
+/*Properties*/
 .container{
     align-items: center;
     justify-content: center;
@@ -45,6 +49,8 @@ a{
     text-decoration: none;
 }
 
+
+/*Button Properties*/
 .login , .sign-in{
     text-align: center;
     font-size: 24px;
@@ -74,6 +80,9 @@ a{
 .sign-in{
     margin-left:20px;
 }
+
+
+/*hover effect*/
 .login:hover , .sign-in:hover{
     background-color: #B6B6B6;
     color: #0A0A0A;
@@ -84,6 +93,15 @@ a{
 
 }
 
+
+/*Click effect*/
+
+.login , .sign-in, .guest:active{
+    opacity: 0.8;
+}
+
+
+/*video*/
 .background-clip{
     position: absolute;
     right: 0;
@@ -102,5 +120,24 @@ a{
     .background-clip{
         width: auto;
         height: 100%;
+    }
+}
+
+/*Animation*/
+
+
+#form{
+    opacity: 0;
+    animation: fadeIn 02s linear forwards;
+    animation-delay: 20s;
+}
+
+@keyframes fadeIn{
+    0% {
+        
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
     }
 }
