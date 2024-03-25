@@ -11,7 +11,6 @@ from M68.response import responce
 import hashlib
 
 
-
 # Connect to MongoDB
 client = MongoClient('mongodb://localhost:27017/')
 db = client['intelliAi']
