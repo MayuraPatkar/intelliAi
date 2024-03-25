@@ -7,6 +7,8 @@ import torch
 from M68.model import NeuralNet
 from M68.preprocess import bag_of_words, tokenize
 from M68.modelVision import image_response
+from M68.modelTransformer import context
+from M68.modelQuestionAnswer import answer
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,8 +46,8 @@ def responce(promt = None, image=None):
     _, predicted = torch.max(output, dim=1)
 
     tag = tags[predicted.item()]
-
-    if tag == 'greeting' :
+    print("Tag: ",tag)
+    if tag == 'greeting':
         probs = torch.softmax(output, dim=1)
         prob = probs[0][predicted.item()]
         if prob.item() > 0.75:
@@ -53,6 +55,7 @@ def responce(promt = None, image=None):
                 if tag == intent["tag"]:
                     responce = random.choice(intent['responses'])
     else:
-        responce = "i don't understand..."
+        context_ = context(promt)
+        responce = answer(promt, context_)
 
     return responce
