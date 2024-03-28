@@ -166,8 +166,6 @@
         }
 
 
-
-
         logout.addEventListener('click', function (event) {
             event.preventDefault();
             const xhr = new XMLHttpRequest();
@@ -199,8 +197,10 @@
 
         deleteAccount.addEventListener('click', function (event) {
             event.preventDefault();
+            const email = "{{ email }}";
             const xhr = new XMLHttpRequest();
             xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     const response = JSON.parse(xhr.responseText);
@@ -209,13 +209,14 @@
                     console.error('Request failed. Status: ' + xhr.status);
                 }
             };
-            xhr.send();
+            xhr.send(JSON.stringify({ email: email }));
         });
+
 
     </script>
 
     <script>
-        
+
         const startBtn = document.getElementById('startBtn');
         const userInput = document.getElementById('user-message');
 

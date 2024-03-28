@@ -48,7 +48,13 @@ def index(request):
         return render(request, 'landingPage.html')
 
 def intelliAi(request):
-    return render(request, 'intelliAi.html')
+    email = None
+    if 'session_token' in request.COOKIES:
+        session_token = request.COOKIES['session_token']
+        user = collection.find_one({'session_token': session_token})
+        if user:
+            email = user.get('email')
+    return render(request, 'intelliAi.html', {'email': email})
 
 def signup(request):
     if request.method == 'POST':
@@ -123,11 +129,15 @@ def logout(request):
 def deleteAccount(request):
     if request.method == 'POST':
         try:
-            response = JsonResponse({'message': 'success'})
-            response.delete_cookie('session_token')
-            return response
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+            email = request.POST.get('email')
+            print(email)
+            if email:
+                collection.delete_one({'email': email})
+                response = JsonResponse({'message': 'success'})
+                response.delete_cookie('session_token')
+                return response
+            else:
+                return JsonResponse({'error': 'Email not provided'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     else:
