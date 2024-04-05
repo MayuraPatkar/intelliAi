@@ -6,76 +6,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IntelliAI</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2a2a2a;
-            color: #ffffff;
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3c4946;
+            margin: 0;
+            padding: 0;
             display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
+
         }
 
         header {
-            background-color: #333;
-            padding: 10px 20px;
+            background-color: #3c4946;
+            color: #fff;
+            padding: 20px;
             text-align: center;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 32px;
-        }
-
-        .chat-container {
-            width: 100%;
-            max-width: 600px;
-            height: 80vh;
-            background-color: #444;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+        .container {
+            width: 1000px;
+            margin: 20px auto;
+            height: 90vh;
+            padding: 20px;
+            background-color: #3c4946;
+            border-radius: 8px;
         }
 
         .chat-box {
-            flex: 1;
+            height: 90%;
             overflow-y: auto;
             padding: 10px;
-            background-color: #222;
-            border-radius: 5px;
+            background-color: #3c4946;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
         }
 
         .user-message {
-            text-align: right;
-            color: #ffffcc;
+            color: #ffffff;
+            align-self: flex-end;
+            margin-top: 20px;
         }
 
         .ai-message {
-            text-align: left;
-            color: #99ccff;
-        }
-
-        input[type="text"] {
-            width: calc(100% - 70px);
-            padding: 8px;
-            border: none;
-        }
-
-        input[type="submit"] {
-            padding: 8px 15px;
-            background-color: #007bff;
-            border: none;
-            color: #fff;
-            cursor: pointer;
+            color: #ffffff;
+            margin-top: 10px;
         }
 
         #user-input {
             display: flex;
+            bottom: 0;
+            margin-left: 10px;
+            justify-content: space-between;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 90px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #startBtn {
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #profile {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #profile button {
+            margin-top: 10px;
+            margin-left: 10px;
+            padding: 8px 20px;
+            background-color: #dc3545;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -84,162 +120,165 @@
     <header>
         <h1>IntelliAI</h1>
     </header>
-    <div class="chat-container">
-        <div class="chat-box" id="chat-box">
-            <div class="ai-message"></div>
-        </div>
-        <form id="user-input" action="javascript:void(0)" enctype="multipart/form-data">
+    <div class="container">
+        <div class="chat-box" id="chat-box"></div>
+        <form id="user-input">
             <input type="text" id="user-message" placeholder="Type your message...">
             <input type="file" id="image" accept="image/*">
             <button id="startBtn">Start Recording</button>
             <input type="submit" value="Send">
         </form>
-        <div id="profile">
-            <button id="logout">logout</button>
-            <button id="clear-data">clear data</button>
-            <button id="delete-account">delete account</button>
-        </div>
+    </div>
+    <div id="profile">
+        <button id="logout">Logout</button>
+        <button id="clear-data">Clear Data</button>
+        <button id="delete-account">Delete Account</button>
     </div>
 
-    <script>
-        const chatBox = document.getElementById('chat-box');
-        const form = document.getElementById('user-input');
-        const logout = document.getElementById('logout');
-        const clearData = document.getElementById('clear-data');
-        const deleteAccount = document.getElementById('delete-account');
-
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const prompt = document.getElementById('user-message').value.trim();
-            const image = document.getElementById('image').files[0];
-
-            if (prompt || image) {
-                const formData = new FormData();
-                formData.append('prompt', prompt);
-                if (image) {
-                    formData.append('image', image);
-                    appendImage('user', image);
-                }
-
-                appendMessage('user', prompt);
-                sendPrompt(formData);
-
-                document.getElementById('user-message').value = '';
-                document.getElementById('image').value = '';
-            }
-        });
-
-        function sendPrompt(formData) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    appendMessage('ai', response.message);
-                } else {
-                    console.error('Request failed. Status: ' + xhr.status);
-                }
-            };
-            xhr.send(formData);
-        }
-
-        function appendMessage(sender, message) {
-            const messageElement = document.createElement('div');
-            messageElement.classList.add(sender + '-message');
-            messageElement.textContent = message;
-            chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function appendImage(sender, image) {
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-                const imageElement = document.createElement('img');
-                imageElement.classList.add(sender + '-message');
-                imageElement.src = event.target.result;
-                chatBox.appendChild(imageElement);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            };
-
-            reader.readAsDataURL(image);
-        }
-
-
-        logout.addEventListener('click', function (event) {
-            event.preventDefault();
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://127.0.0.1:8000/logout/');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    window.location = "/";
-                } else {
-                    console.error('Request failed. Status: ' + xhr.status);
-                }
-            };
-            xhr.send();
-        });
-
-        clearData.addEventListener('click', function (event) {
-            event.preventDefault();
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                } else {
-                    console.error('Request failed. Status: ' + xhr.status);
-                }
-            };
-            xhr.send();
-        });
-
-        deleteAccount.addEventListener('click', function (event) {
-            event.preventDefault();
-            const email = "{{ email }}";
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    window.location = "/";
-                } else {
-                    console.error('Request failed. Status: ' + xhr.status);
-                }
-            };
-            xhr.send(JSON.stringify({ email: email }));
-        });
-
-
-    </script>
-
-    <script>
-
-        const startBtn = document.getElementById('startBtn');
-        const userInput = document.getElementById('user-message');
-
-        const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
-        recognition.lang = 'en-US';
-
-        recognition.onstart = function () {
-            console.log('Speech recognition started');
-        };
-
-        recognition.onresult = function (event) {
-            const result = event.results[event.resultIndex];
-            const transcript = result[0].transcript;
-            userInput.value = transcript;
-        };
-
-        startBtn.addEventListener('click', function () {
-            recognition.start();
-        });
-
-    </script>
-
-
 </body>
+
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const form = document.getElementById('user-input');
+    const logout = document.getElementById('logout');
+    const clearData = document.getElementById('clear-data');
+    const deleteAccount = document.getElementById('delete-account');
+
+    function loadHistory(){
+        
+    }
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const prompt = document.getElementById('user-message').value.trim();
+        const image = document.getElementById('image').files[0];
+
+        if (prompt || image) {
+            const formData = new FormData();
+            formData.append('prompt', prompt);
+            if (image) {
+                formData.append('image', image);
+                appendImage('user', image);
+            }
+
+            appendMessage('user', prompt);
+            sendPrompt(formData);
+
+            document.getElementById('user-message').value = '';
+            document.getElementById('image').value = '';
+        }
+    });
+
+    function sendPrompt(formData) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                appendMessage('ai', response.message);
+            } else {
+                console.error('Request failed. Status: ' + xhr.status);
+            }
+        };
+        xhr.send(formData);
+    }
+
+    function appendMessage(sender, message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add(sender + '-message');
+        if (sender == "user")
+            messageElement.textContent = "You: " + message;
+        else
+            messageElement.textContent = "IntelliAi: " + message;
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function appendImage(sender, image) {
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            const imageElement = document.createElement('img');
+            imageElement.classList.add(sender + '-message');
+            imageElement.src = event.target.result;
+            chatBox.appendChild(imageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+
+        reader.readAsDataURL(image);
+    }
+
+
+    logout.addEventListener('click', function (event) {
+        event.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://127.0.0.1:8000/logout/');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                window.location = "/";
+            } else {
+                console.error('Request failed. Status: ' + xhr.status);
+            }
+        };
+        xhr.send();
+    });
+
+    clearData.addEventListener('click', function (event) {
+        event.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+            } else {
+                console.error('Request failed. Status: ' + xhr.status);
+            }
+        };
+        xhr.send();
+    });
+
+    deleteAccount.addEventListener('click', function (event) {
+        event.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                window.location = "/";
+            } else {
+                console.error('Request failed. Status: ' + xhr.status);
+            }
+        };
+        xhr.send();
+    });
+
+</script>
+
+<script>
+
+    const startBtn = document.getElementById('startBtn');
+    const userInput = document.getElementById('user-message');
+
+    const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+    recognition.lang = 'en-US';
+
+    recognition.onstart = function () {
+        console.log('Speech recognition started');
+    };
+
+    recognition.onresult = function (event) {
+        const result = event.results[event.resultIndex];
+        const transcript = result[0].transcript;
+        userInput.value = transcript;
+    };
+
+    startBtn.addEventListener('click', function () {
+        recognition.start();
+    });
+
+</script>
 
 </html>
