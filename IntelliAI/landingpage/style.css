@@ -3,7 +3,9 @@
     margin: 0;
     box-sizing: border-box;
     font-family: 'Pixelify sans';
+    cursor: url('../Assets/cursor2.png'),auto;
 }
+
 body{
     overflow:hidden;
 }
@@ -115,6 +117,7 @@ a{
     height: 100vh;
     width: 100vw;
 }
+/* Mobile */
 @media (max-width:800px) {
     .video_mobile{
         visibility: visible;
@@ -122,40 +125,32 @@ a{
     .video_web{
         visibility: hidden;
     }
-    .form{
-        position: fixed;
-        align-self: center;
-        left:0%;
-        top:0%;
-        right: 0%;
-        bottom: 0%;
-    }
     .login{
         position: absolute;
-        left: 20%;
-        margin-top: 129%;
+        margin-left: 20vw;
+        margin-top: 73vh;
         width: 25%;
         font-size: 18px;
         padding: 8px 15px;
     }
     .guest{
         position: absolute;
-        margin-left: 20%;
-        margin-top: 145%;
+        margin-left: 24vw;
+        margin-top: 82vh;
         font-size: 18px;
     }
     .sign-in{
         position: absolute;
-        top: 10%;
-        left: 55%;
-        margin-top: 129%;
+        margin-left: 55vw;
+        margin-top: 73vh;
         width: 25%;
         font-size: 18px;
         padding: 8px 15px;
     }
     
 }
-@media (min-width:800px){
+/* Desktop exact size */
+@media (min-width:1920px){
     .video_mobile{
         visibility: hidden;
     }
@@ -164,21 +159,106 @@ a{
     }
 
     .login{
-        margin-top: 41.2%;
-        margin-left: 42%;
-        position: fixed;
+        margin-top: 73.2vh;
+        margin-left: 42vw;
+        position: absolute;
 
         margin-right:20px;
     }
     .sign-in{
-        margin-top: 41.2%;
-        margin-left: 52%;
+        margin-top: 73.2vh;
+        margin-left: 52vw;
         position: absolute;
     }
     .guest{
-        margin-top: 46%;
-        margin-left: 42.5%;
-        position: fixed;
+        margin-top: 80vh;
+        margin-left: 42.5vw;
+        position: absolute;
+    }
+}
+
+/* Desktop  */
+@media (min-width:1500px) and (max-width:1919px){
+    .video_mobile{
+        visibility: hidden;
+    }
+    .video_web{
+        visibility: visible;
+    }
+
+    .login{
+        margin-top: 75.5vh;
+        margin-left: 42vw;
+        position: absolute;
+
+        margin-right:20px;
+    }
+    .sign-in{
+        margin-top: 75.5vh;
+        margin-left: 52vw;
+        position: absolute;
+    }
+    .guest{
+        margin-top: 83vh;
+        margin-left: 42.5vw;
+        position: absolute;
+    }
+}
+
+/* laptop exact size */
+@media (min-width:1366px) and (max-width:1499px){
+    .video_mobile{
+        visibility: hidden;
+    }
+    .video_web{
+        visibility: visible;
+    }
+
+    .login{
+        margin-top: 72vh;
+        margin-left: 38.5vw;
+        position: absolute;
+
+        margin-right:20px;
+    }
+    .sign-in{
+        margin-top: 72vh;
+        margin-left: 53vw;
+        position: absolute;
+    }
+    .guest{
+        margin-top: 82vh;
+        margin-left: 40vw;
+        position: absolute;
+    }
+}
+
+/* laptop  */
+@media (min-width:900px) and (max-width:1365px)
+{
+    .video_mobile{
+        visibility: hidden;
+    }
+    .video_web{
+        visibility: visible;
+    }
+
+    .login{
+        margin-top: 74.3vh;
+        margin-left: 38.5vw;
+        position: absolute;
+
+        margin-right:20px;
+    }
+    .sign-in{
+        margin-top: 74.3vh;
+        margin-left: 53vw;
+        position: absolute;
+    }
+    .guest{
+        margin-top: 85vh;
+        margin-left: 40vw;
+        position: absolute;
     }
 }
 
