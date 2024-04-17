@@ -7,7 +7,7 @@ import secrets
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-from M68.response import responce
+from M68.response import get_response
 import hashlib
 
 
@@ -104,7 +104,7 @@ def ai_response(request):
     if request.method == 'POST':
         prompt = request.POST.get('prompt', '')
         image = request.FILES.get('image', None)
-        ai_response = responce(prompt, image)
+        ai_response = get_response(prompt, image)
         timestamp = datetime.now()
         chat_history = {'prompt':prompt, 'response':ai_response, 'timestamp':timestamp}
         chat_history_collection.insert_one(chat_history)

@@ -3,7 +3,6 @@ from M68.config import get_config, get_weights_file_path
 from M68.model import build_transformer
 from tokenizers import Tokenizer
 import torch
-import sys
 
 def inference(sentence: str):
     # Define the device, tokenizers, and model
