@@ -1,6 +1,6 @@
 from pathlib import Path
-from config import get_config, get_weights_file_path
-from model import build_transformer
+from M68.config import get_config, get_weights_file_path
+from M68.model import build_transformer
 from tokenizers import Tokenizer
 import torch
 import sys
@@ -48,8 +48,6 @@ def inference(sentence: str):
             prob = model.project(out[:, -1])
             _, next_word = torch.max(prob, dim=1)
             decoder_input = torch.cat([decoder_input, torch.empty(1, 1).type_as(source).fill_(next_word.item()).to(device)], dim=1)
-
-            print(f"{tokenizer_tgt.decode([next_word.item()])}", end=' ')
 
             if next_word == tokenizer_tgt.token_to_id('[EOS]'):
                 break
