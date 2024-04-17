@@ -1,0 +1,148 @@
+from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from pymongo import MongoClient
+from datetime import datetime, timedelta
+import secrets
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from M68.response import responce
+import hashlib
+
+
+# Connect to MongoDB
+client = MongoClient('mongodb://localhost:27017/')
+db = client['intelliAi']
+collection = db['accounts']
+chat_history_collection = db['conv_history']
+
+def hash_password(password):
+    # SHA-256 algorithm
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    return hashed_password
+
+
+def generate_session_token():
+    token = secrets.token_urlsafe(16)
+    return token
+
+
+def is_valid_session_token(session_token):
+    if session_token:
+        user_data = collection.find_one({'session_token': session_token})
+        if user_data:
+            expiry_date = user_data.get('expiry_date')
+            if expiry_date and expiry_date > datetime.now():
+                return True
+    return False
+
+
+# Create your views here.
+
+def index(request):
+    session_token = request.COOKIES.get('session_token')
+
+    if is_valid_session_token(session_token):
+        return render(request, 'intelliAi.html')
+    else:
+        return render(request, 'landingPage.html')
+
+def intelliAi(request):
+    if 'session_token' in request.COOKIES:
+        session_token = request.COOKIES['session_token']
+        user = collection.find_one({'session_token': session_token})
+    return render(request, 'intelliAi.html')
+
+def signup(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if collection.find_one({'email': email}):
+            return render(request, 'signup.html', {'error_message': 'User already exists. Please log in.'})
+        else:
+            hashed_password = hash_password(password)
+            session_token = generate_session_token()
+            expiry_date = datetime.now() + timedelta(days=1)
+            user_data = {'name': name, 'email': email, 'password': hashed_password, 'session_token': session_token, 'expiry_date': expiry_date}
+            collection.insert_one(user_data)
+            response = redirect('intelliAi')
+            response.set_cookie('session_token', session_token, expires=expiry_date)
+
+            return response
+
+    else:
+        return render(request, 'signup.html')
+
+# login
+def user_login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        hashed_password = hash_password(password)
+        print(hashed_password)
+        user = collection.find_one({'email': email, 'password': hashed_password})
+
+        if user:
+            print(user)
+            session_token = generate_session_token()
+            expiry_date = datetime.now() + timedelta(days=1)
+            collection.update_one({'email': email}, {'$set': {'session_token': session_token, 'expiry_date': expiry_date}})
+            response = redirect('intelliAi')
+            response.set_cookie('session_token', session_token, expires=expiry_date)
+            
+            return response
+        else:
+            return render(request, 'login.html', {'error_message': 'Invalid email or password.'})
+    else:
+        return render(request, 'login.html')
+
+@csrf_exempt
+def ai_response(request):
+    if request.method == 'POST':
+        prompt = request.POST.get('prompt', '')
+        image = request.FILES.get('image', None)
+        ai_response = responce(prompt, image)
+        timestamp = datetime.now()
+        chat_history = {'prompt':prompt, 'response':ai_response, 'timestamp':timestamp}
+        chat_history_collection.insert_one(chat_history)
+
+        return JsonResponse({'message': ai_response})
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def logout(request):
+    if request.method == 'POST':
+        try:
+            response = JsonResponse({'message': 'success'})
+            response.delete_cookie('session_token')
+            return response
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def deleteAccount(request):
+    if request.method == 'POST':
+        session_token = request.COOKIES.get('session_token')
+        user = collection.find_one({'session_token': session_token})
+        if user:
+            email = user['email']
+            collection.delete_one({'email': email})
+            response = JsonResponse({'message': 'success'})
+            response.delete_cookie('session_token')
+            return response
+        else:
+            return JsonResponse({'error': 'user not found!'}, status=400)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+@csrf_exempt
+def clearChat():
+    pass
