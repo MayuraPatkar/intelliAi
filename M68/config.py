@@ -5,7 +5,7 @@ def get_config():
         "batch_size": 2,
         "num_epochs": 20,
         "lr": 10**-4,
-        "seq_len": 200,
+        "seq_len": 300,
         "d_model": 512,
         "model_basename": "M68",
         "tokenizer_file": "M68/tokenizer_V2_{0}.json",

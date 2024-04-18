@@ -35,8 +35,6 @@ def inference(sentence: str):
         # Initialize the decoder input with the sos token
         decoder_input = torch.empty(1, 1).fill_(tokenizer_tgt.token_to_id('[SOS]')).type_as(source).to(device)
 
-        print("IntelliAi: ", end='')
-
         # Generate sentences word by word
         while decoder_input.size(1) < seq_len:
             # build mask for target and calculate output
