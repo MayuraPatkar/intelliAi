@@ -8,12 +8,12 @@ def get_config():
         "seq_len": 200,
         "d_model": 512,
         "model_basename": "M68",
-        "tokenizer_file": "tokenizer_V2_{0}.json",
+        "tokenizer_file": "M68/tokenizer_V2_{0}.json",
         "project_name": "runs/M68"
     }
 
 def get_weights_file_path(config):
-    model_folder = "model_folder"
+    model_folder = "M68/model_folder"
     weights_dir = Path(model_folder)
     weights_dir.mkdir(parents=True, exist_ok=True)
     model_filename = f"{config['model_basename']}.pt"
