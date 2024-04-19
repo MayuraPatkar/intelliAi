@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from user import views
-from .views import ai_response, logout, deleteAccount
+from .views import ai_response, logout, deleteAccount, clear_data
 
 urlpatterns = [
     path("", views.index, name='user'),
@@ -10,5 +10,6 @@ urlpatterns = [
     path("", views.intelliAi, name='intelliAi'),
     path('ai-response/', ai_response, name='ai_response'),
     path('logout/', logout, name='logout'),
+    path('clear-data/', clear_data, name='clear-data'),
     path('kill-account/', deleteAccount, name='kill-account'),
 ]

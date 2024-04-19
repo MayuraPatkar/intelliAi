@@ -144,5 +144,15 @@ def deleteAccount(request):
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 @csrf_exempt
-def clearChat():
-    pass
+def clear_data(request):
+    if request.method == 'POST':
+        session_token = request.COOKIES.get('session_token')
+        user = collection.find_one({'session_token': session_token})
+        if user:
+            response = JsonResponse({'message': 'success'})
+            response.delete_cookie('session_token')
+            return response
+        else:
+            return JsonResponse({'error': 'user not found!'}, status=400)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
