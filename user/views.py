@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from M68.response import get_response
 import hashlib
+from bson import ObjectId
 
 
 # Connect to MongoDB
@@ -98,18 +99,58 @@ def user_login(request):
             return render(request, 'login.html', {'error_message': 'Invalid email or password.'})
     else:
         return render(request, 'login.html')
+    
+@csrf_exempt
+def get_conve_history(request):
+    if request.method == 'POST':
+        session_token = request.COOKIES.get('session_token')
+        user = collection.find_one({'session_token': session_token})
+        
+        if user:
+            user_id = str(user['_id'])
+            chat_history = chat_history_collection.find({'ref': user_id})
+            
+            chat_history_list = [
+                {
+                    '_id': str(chat['_id']),
+                    'ref': chat['ref'],
+                    'prompt': chat['prompt'],
+                    'response': chat['response'],
+                    'timestamp': chat['timestamp']
+                }
+                for chat in chat_history
+            ]
+            print(chat_history)
+            if chat_history_list:
+                return JsonResponse(chat_history_list, safe=False)
+            else:
+                return JsonResponse({'message': 'No conversation history found for this user'}, status=404)
+        else:
+            return JsonResponse({'error': 'User not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 @csrf_exempt
 def ai_response(request):
     if request.method == 'POST':
         prompt = request.POST.get('prompt', '')
         image = request.FILES.get('image', None)
-        ai_response = get_response(prompt, image)
-        timestamp = datetime.now()
-        chat_history = {'prompt':prompt, 'response':ai_response, 'timestamp':timestamp}
-        chat_history_collection.insert_one(chat_history)
 
-        return JsonResponse({'message': ai_response})
+        ai_response = get_response(prompt, image)
+        
+        session_token = request.COOKIES.get('session_token')
+        user = collection.find_one({'session_token': session_token})
+        
+        if user:
+            timestamp = datetime.now()
+            user_id = str(user['_id'])
+            
+            chat_history = {'ref': user_id, 'prompt': prompt, 'response': ai_response, 'timestamp': timestamp}
+            chat_history_collection.insert_one(chat_history)
+        
+            return JsonResponse({'message': ai_response})
+        else:
+            return JsonResponse({'error': 'User not found'}, status=404)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
@@ -149,10 +190,10 @@ def clear_data(request):
         session_token = request.COOKIES.get('session_token')
         user = collection.find_one({'session_token': session_token})
         if user:
-            response = JsonResponse({'message': 'success'})
-            response.delete_cookie('session_token')
-            return response
+            user_id = str(user['_id'])
+            chat_history_collection.delete_many({'ref': user_id})
+            return JsonResponse({'message': 'Data cleared successfully'})
         else:
-            return JsonResponse({'error': 'user not found!'}, status=400)
+            return JsonResponse({'error': 'User not found'}, status=404)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)

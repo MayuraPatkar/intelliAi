@@ -1,4 +1,4 @@
 __pycache__
 .gitattributes
-*.json
 *.pt
+model_folder/
