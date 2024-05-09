@@ -138,19 +138,18 @@ def ai_response(request):
 
         ai_response = get_response(prompt, image)
         
-        session_token = request.COOKIES.get('session_token')
-        user = collection.find_one({'session_token': session_token})
+        if not image:
+            session_token = request.COOKIES.get('session_token')
+            user = collection.find_one({'session_token': session_token})
         
-        if user:
-            timestamp = datetime.now()
-            user_id = str(user['_id'])
+            if user:
+                timestamp = datetime.now()
+                user_id = str(user['_id'])
             
-            chat_history = {'ref': user_id, 'prompt': prompt, 'response': ai_response, 'timestamp': timestamp}
-            chat_history_collection.insert_one(chat_history)
+                chat_history = {'ref': user_id, 'prompt': prompt, 'response': ai_response, 'timestamp': timestamp}
+                chat_history_collection.insert_one(chat_history)
         
-            return JsonResponse({'message': ai_response})
-        else:
-            return JsonResponse({'error': 'User not found'}, status=404)
+        return JsonResponse({'message': ai_response})
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 

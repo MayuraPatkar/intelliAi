@@ -8,7 +8,7 @@ def get_config():
         "seq_len": 400,
         "d_model": 512,
         "model_file_path": "M68/model_folder/M68.pt",
-        "tokenizer_file": "M68/tokenizers/tokenizer_{0}.json",
+        "tokenizer": "M68/tokenizer/tokenizer_{0}.json",
     }
 
 def get_weights_file_path(config):
