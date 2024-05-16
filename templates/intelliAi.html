@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <title>IntelliAI</title>
     <style>
         * {
@@ -23,6 +26,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: "Roboto", sans-serif;
         }
 
         .container {
@@ -64,7 +68,7 @@
         }
 
         .blurred-div {
-            padding: 2%;
+            padding: 1%;
             position: absolute;
             align-items: center;
             display: flex;
@@ -82,26 +86,51 @@
 
 
         #logout {
-            width: 80%;
-            height: 30%;
+            width: 90%;
+            height: 50%;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #7E7E7E;
             border-radius: 12px;
+        }
+
+        #logout:hover {
+            background-color: #acacac;
         }
 
         #clear-data {
-            width: 80%;
-            height: 30%;
+            width: 90%;
+            height: 50%;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
             border-radius: 12px;
+            background-color: #7E7E7E;
+        }
+
+        #clear-data:hover {
+            background-color: #acacac;
         }
 
         #delete-account {
-            width: 80%;
-            height: 30%;
+            width: 90%;
+            height: 50%;
+            margin-top: 10px;
+            cursor: pointer;
             border-radius: 12px;
+            border: none;
+            background-color: rgb(192, 27, 27);
+            color: white;
+        }
+
+        #delete-account:hover {
+            background-color: rgb(223, 47, 47);
         }
 
         .chat-box {
             width: 50vw;
-            height: 60vh;
+            height: 65vh;
             color: white;
             overflow-y: scroll;
         }
@@ -119,19 +148,36 @@
             background-color: #7E7E7E;
             border-radius: 50px;
             border: 2px solid #7E7E7E80;
-            width: 30px;
-            margin-left: -10px;
-            margin-right: -10px;
+            width: 50px;
+            height: 20px;
+            margin-left: -15px;
+            margin-right: -15px;
         }
 
         .chat-box::-webkit-scrollbar-thumb:hover {
-            background-color: #555;
+            background-color: #bbbbbb;
         }
 
 
         .user-message {
             padding: 10px;
             display: flex;
+            margin-top: 20px;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .user-imageMessage {
+            margin-top: 20px;
+            margin-left: 50px;
+        }
+
+        @font-face {
+            font-family: 'Pixelify Sans';
+            src: url("{% static 'PixelifySans-Medium.ttf' %}") format('truetype');
+        }
+
+        .user-message p {
+            font-family: "Pixelify Sans", sans-serif;
         }
 
         .user-message img {
@@ -143,12 +189,17 @@
         .ai-message {
             padding: 10px;
             display: flex;
+            font-family: "Roboto", sans-serif;
         }
 
         .ai-message img {
             width: 25px;
             height: 25px;
             margin-right: 10px;
+        }
+
+        .ai-message p {
+            font-family: "Pixelify Sans", sans-serif;
         }
 
         #user-input {
@@ -171,6 +222,7 @@
             padding-left: 20px;
             border-radius: 50px;
             width: 63%;
+            font-family: "Pixelify Sans", sans-serif;
             background-color: transparent;
             outline: none;
             border: none;
@@ -226,9 +278,20 @@
             height: 50px;
         }
 
-        input[type='submit'] {
+
+        .input-with-image {
             width: 50%;
             height: 80%;
+            border-radius: 50px;
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        input[type='submit'] {
+            width: 100%;
+            height: 100%;
+            font-family: "Pixelify Sans", sans-serif;
             background: radial-gradient(100% 1362.48% at 0% 0%, #7420D5 0%, #6C16E4 100%);
             box-shadow: 0px 3.98px 1.99px 0px #FFFFFF40 inset;
             box-shadow: 0px -7.97px 3.98px 0px #00000040 inset;
@@ -236,6 +299,15 @@
             border-radius: 50px;
             color: white;
             cursor: pointer;
+        }
+
+        .starlogo {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 20px;
+            height: auto;
         }
     </style>
 </head>
@@ -258,10 +330,13 @@
                     <label for="image" class="custom-file-label"><img src="{% static 'image.png' %}"></label>
                     <input type="file" id="image" accept="image/*" class="custom-file-input">
                 </div>
-                <input type="submit" value="Generate">
+                <div class="input-with-image">
+                    <input type="submit" value="Generate" class="submit-button">
+                    <img src="{% static 'yellowstar.png' %}" class="starlogo">
+                </div>
+
             </div>
         </form>
-
     </div>
 </body>
 
@@ -359,7 +434,7 @@
             userIcon.classList.add('user-icon');
 
             const userMessage = document.createElement('div');
-            userMessage.innerHTML = "You <br>" + message;
+            userMessage.innerHTML = "<p>You</p> <br>" + message;
 
             messageElement.appendChild(userIcon);
             messageElement.appendChild(userMessage);
@@ -369,7 +444,7 @@
             aiIcon.classList.add('ai-icon');
 
             const aiResponse = document.createElement('div');
-            aiResponse.innerHTML = "IntelliAi <br>" + message;
+            aiResponse.innerHTML = "<p>IntelliAi</p> <br>" + message;
 
             messageElement.appendChild(aiIcon);
             messageElement.appendChild(aiResponse);
@@ -385,7 +460,7 @@
 
         reader.onload = function (event) {
             const imageElement = document.createElement('img');
-            imageElement.classList.add(sender + '-message');
+            imageElement.classList.add(sender + '-imageMessage');
             imageElement.src = event.target.result;
             chatBox.appendChild(imageElement);
             chatBox.scrollTop = chatBox.scrollHeight;
