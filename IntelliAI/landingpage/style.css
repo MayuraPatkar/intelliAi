@@ -6,13 +6,10 @@
     background-color: black;
 }
 
-/*Scrollbar-disabled*/
 body::-webkit-scrollbar{
     display: none;
 }
 
-
-/*Properties*/
 .container{
     height:100vh;
     width:100%;
@@ -46,6 +43,7 @@ body::-webkit-scrollbar{
     width:400px;
     height:55px;
 }
+
 a{
     color:none;
     background-color: none;
@@ -128,13 +126,6 @@ a{
 }
 
 /*Animation*/
-
-
-#form{
-    opacity: 0;
-    animation: fadeIn 500ms linear forwards;
-    animation-delay: 17.7s;
-}
 
 @keyframes fadeIn{
     0% {
