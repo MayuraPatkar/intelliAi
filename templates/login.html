@@ -1,64 +1,214 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Page</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    @font-face {
+      font-family: 'Pixelify Sans';
+      src: url("{% static 'PixelifySans-Medium.ttf' %}") format('truetype');
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      background-color: #f0f0f0;
+      box-sizing: border-box;
+      font-family: 'Pixelify Sans', sans-serif;
     }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: black;
+      color: white;
+    }
+
+    .background {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .star {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: url('star.png') no-repeat center center;
+      background-size: contain;
+      animation: float 10s linear infinite;
+    }
+
+    .star-0 {
+      left: 0%;
+      top: 10%;
+      transform: rotate(-13.85deg);
+    }
+
+    .star-1 {
+      top: 10%;
+      left: 10%;
+    }
+
+    .star-2 {
+      top: 20%;
+      right: 15%;
+    }
+
+    .star-3 {
+      bottom: 15%;
+      left: 20%;
+    }
+
+    .star-4 {
+      bottom: 10%;
+      right: 10%;
+    }
+
+    .star-5 {
+      top: 10%;
+      left: 10%;
+    }
+
+    .star-6 {
+      top: 20%;
+      right: 15%;
+    }
+
+    .star-7 {
+      bottom: 15%;
+      left: 20%;
+    }
+
+    .star-8 {
+      bottom: 10%;
+      right: 10%;
+    }
+
+    .star-9 {
+      bottom: 10%;
+      right: 10%;
+    }
+
+    .logo {
+      width: 150px;
+      height: 60px;
+      margin-bottom: 40px;
+    }
+
     .container {
-      max-width: 400px;
-      margin: 50px auto;
+      width: 25%;
       padding: 20px;
-      background-color: #fff;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 34px;
+      background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1;
     }
-    .form-group {
+
+    .title {
       margin-bottom: 20px;
     }
-    .form-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .form-group input {
-      width: 95%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .form-group input[type="submit"] {
+
+    .form {
       width: 100%;
-      background-color: #007bff;
-      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .form h2 {
+      margin-bottom: 10px;
+    }
+
+    .form p {
+      margin-bottom: 20px;
+    }
+
+    .form input[type="text"],
+    .form input[type="email"],
+    .form input[type="password"],
+    .form input[type="submit"] {
+      width: 90%;
+      height: 5vh;
+      border-radius: 17px;
+      margin-top: 10px;
+      padding: 2%;
+      border: none;
+    }
+
+    .form input[type="submit"] {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .form input[type="submit"]:hover {
+      background-color: black
+    }
+
+    .form p a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .form p a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-20px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <h2>Login</h2>
-    <form id="login-form" method="POST" onsubmit="return validateForm()">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-      </div>
-      <div class="form-group">
+  <div class="background">
+    <img src="{% static 'star.png' %}" class="star star-0">
+    <img src="{% static 'star.png' %}" class="star star-1">
+    <img src="{% static 'star.png' %}" class="star star-2">
+    <img src="{% static 'star.png' %}" class="star star-3">
+    <img src="{% static 'star.png' %}" class="star star-4">
+    <img src="{% static 'star.png' %}" class="star star-5">
+    <img src="{% static 'star.png' %}" class="star star-6">
+    <img src="{% static 'star.png' %}" class="star star-7">
+    <img src="{% static 'star.png' %}" class="star star-8">
+    <img src="{% static 'star.png' %}" class="star star-9">
+    <img src="{% static 'logo.png' %}" class="logo">
+    <div class="container">
+      <form class="form" id="signup-form" method="POST" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <h2>Login</h2>
+        <p>Welcome back! Please login to access your account.</p>
+        <input type="email" placeholder="Email" name="email" required>
+        <input type="password" placeholder="Password" name="password" required>
         <input type="submit" value="Login">
-      </div>
-    </form>
-    <a href="{% url 'signup' %}">Create new account?</a>
+        <p><a href="/signup">Don't have an account? Sign Up</a></p>
+      </form>
+    </div>
   </div>
 
   <script>
