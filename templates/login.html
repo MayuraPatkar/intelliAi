@@ -42,67 +42,113 @@
 
     .star {
       position: absolute;
-      width: 50px;
-      height: 50px;
+      width: 100px;
+      height: 100px;
       background: url('star.png') no-repeat center center;
       background-size: contain;
       animation: float 10s linear infinite;
     }
 
     .star-0 {
-      left: 0%;
-      top: 10%;
-      transform: rotate(-13.85deg);
+      width: 150px;
+      height: 150px;
+      left: -41.49px;
+      top: 288.45px;
+      transform: rotate(13.85deg);
+      animation: star0 5s linear infinite;
     }
 
     .star-1 {
-      top: 10%;
-      left: 10%;
+      width: 100px;
+      height: 100px;
+      top: -49.72px;
+      left: 224px;
+      transform: rotate(7.14deg);
     }
 
     .star-2 {
-      top: 20%;
-      right: 15%;
+      width: 150px;
+      height: 150px;
+      top: 625px;
+      left: 239.76px;
+      transform: rotate(21.39deg);
     }
 
     .star-3 {
-      bottom: 15%;
-      left: 20%;
+      width: 80px;
+      height: 80px;
+      top: 287px;
+      left: 302px;
     }
 
     .star-4 {
-      bottom: 10%;
-      right: 10%;
+      width: 100px;
+      height: 100px;
+      top: 231px;
+      left: 580.77px;
+      transform: rotate(16.65deg);
     }
 
     .star-5 {
-      top: 10%;
-      left: 10%;
+      width: 100px;
+      height: 100px;
+      top: 197.75px;
+      left: 891.37px;
+      transform: rotate(12.71deg);
     }
 
     .star-6 {
-      top: 20%;
-      right: 15%;
+      width: 100px;
+      height: 100px;
+      top: 501px;
+      left: 903.76px;
+      transform: rotate(21.39deg);
     }
 
     .star-7 {
-      bottom: 15%;
-      left: 20%;
+      width: 80px;
+      height: 80px;
+      top: 391.43px;
+      left: 1187.78px;
+      transform: rotate(18.2deg);
     }
 
     .star-8 {
-      bottom: 10%;
-      right: 10%;
+      width: 150px;
+      height: 150px;
+      top: -38.97px;
+      left: 1441px;
+      transform: rotate(-13.29deg);
     }
 
     .star-9 {
-      bottom: 10%;
-      right: 10%;
+      width: 200px;
+      height: 200px;
+      top: 577.83px;
+      left: 1400px;
+      transform: rotate(-22.55deg);
+    }
+
+    @keyframes star0 {
+      0% {
+        width: 150px;
+        height: 150px;
+      }
+
+      50% {
+        width: 145px;
+        height: 145px;
+      }
+
+      100% {
+        width: 150px;
+        height: 150px;
+      }
     }
 
     .logo {
       width: 150px;
-      height: 60px;
+      height: 57px;
       margin-bottom: 40px;
     }
 
@@ -110,7 +156,7 @@
       width: 25%;
       padding: 20px;
       border-radius: 34px;
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.2);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -134,7 +180,9 @@
     }
 
     .form p {
+      margin-top: 10px;
       margin-bottom: 20px;
+      text-align: center;
     }
 
     .form input[type="text"],
@@ -143,6 +191,7 @@
     .form input[type="submit"] {
       width: 90%;
       height: 5vh;
+      outline: none;
       border-radius: 17px;
       margin-top: 10px;
       padding: 2%;
@@ -167,20 +216,6 @@
 
     .form p a:hover {
       text-decoration: underline;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-20px);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
     }
   </style>
 </head>
