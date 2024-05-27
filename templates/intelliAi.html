@@ -46,13 +46,13 @@
         }
 
         .logo {
-            width: 150px;
-            height: 55px;
+            width: 140px;
+            height: 50px;
         }
 
         #profile {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
         }
 
@@ -140,10 +140,11 @@
         }
 
         .chat-box {
-            width: 50vw;
+            width: 60vw;
             height: 65vh;
             color: white;
-            overflow-y: scroll;
+            overflow-y: hidden;
+            position: relative;
         }
 
         .chat-box::-webkit-scrollbar {
@@ -155,20 +156,23 @@
             border-radius: 50px;
         }
 
+        .chat-box::-webkit-scrollbar-track:hover {
+            width: 8px;
+        }
+
         .chat-box::-webkit-scrollbar-thumb {
             background-color: #7E7E7E;
             border-radius: 50px;
             border: 2px solid #7E7E7E80;
-            width: 50px;
-            height: 20px;
-            margin-left: -15px;
-            margin-right: -15px;
+            cursor: pointer;
+            transition: width 0.3s, margin 0.3s;
         }
 
         .chat-box::-webkit-scrollbar-thumb:hover {
             background-color: #bbbbbb;
+            width: 8px;
+            margin-right: -2px;
         }
-
 
         .user-message {
             padding: 10px;
@@ -207,6 +211,8 @@
             width: 25px;
             height: 25px;
             margin-right: 10px;
+            border-radius: 30px;
+            display: block;
         }
 
         .ai-message p {
@@ -214,8 +220,8 @@
         }
 
         #user-input {
-            width: 50vw;
-            height: 6%;
+            width: 60vw;
+            height: 7%;
             border-radius: 50px;
             display: flex;
             justify-content: space-between;
@@ -234,6 +240,7 @@
             border-radius: 50px;
             width: 63%;
             height: 90%;
+            font-size: 1.1rem;
             font-family: "Pixelify Sans", sans-serif;
             background-color: transparent;
             outline: none;
@@ -266,19 +273,30 @@
         }
 
         .custom-file-label {
+            width: 50%;
+            height: 100%;
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
             background-color: transparent;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
+        .custom-file-label:hover {
+            background-color: #D6D6D61A;
+        }
+
         .custom-file-label img {
-            width: 50px;
-            height: 50px;
+            width: 65%;
+            height: 110%;
+            object-fit: cover;
         }
 
         #startBtn {
-            width: 50px;
-            height: 50px;
+            width: 50%;
+            height: 100%;
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
             background-color: transparent;
             border: none;
             cursor: pointer;
@@ -286,10 +304,14 @@
         }
 
         #startBtn img {
-            width: 50px;
-            height: 50px;
+            width: 70%;
+            height: 110%;
+            object-fit: cover;
         }
 
+        #startBtn:hover {
+            background-color: #D6D6D61A;
+        }
 
         .input-with-image {
             width: 50%;
@@ -311,6 +333,10 @@
             border-radius: 50px;
             color: white;
             cursor: pointer;
+        }
+
+        input[type='submit']:hover {
+            background: radial-gradient(100% 1362.48% at 0% 0%, rgba(116, 32, 213, 0.75) 0%, rgba(108, 22, 228, 0.75) 100%);
         }
 
         .starlogo {
@@ -356,6 +382,25 @@
         </form>
     </div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const chatBox = document.querySelector('.chat-box');
+
+        function toggleScrollbar() {
+            if (chatBox.scrollHeight > chatBox.clientHeight) {
+                chatBox.style.overflowY = 'scroll';
+            } else {
+                chatBox.style.overflowY = 'hidden';
+            }
+        }
+
+        toggleScrollbar();
+
+        const observer = new MutationObserver(toggleScrollbar);
+        observer.observe(chatBox, { childList: true, subtree: true });
+        window.addEventListener('resize', toggleScrollbar);
+    });
+</script>
 
 <script>
     const chatBox = document.getElementById('chat-box');
@@ -410,17 +455,25 @@
         });
     }
 
-    form.addEventListener('submit', function (event) {
+    const form_ = document.querySelector('form');
+    const submitButton = document.querySelector('.submit-button');
+
+    form_.addEventListener('submit', function (event) {
         event.preventDefault();
         handleFormSubmit();
-    });
+        submitButton.classList.add('animate');
 
-    const user_input = document.getElementById('user-message');
-    user_input.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            handleFormSubmit();
-        }
+        submitButton.addEventListener('animationend', function () {
+            submitButton.classList.remove('animate');
+        }, { once: true });
+
+        const user_input = document.getElementById('user-message');
+        user_input.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleFormSubmit();
+            }
+        });
     });
 
     function handleFormSubmit() {
@@ -445,8 +498,8 @@
 
     function sendPrompt(formData) {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/ai-response/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
+        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/ai-response/');
+        xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
@@ -507,8 +560,8 @@
     logout.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/logout/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/logout/');
+        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/logout/');
+        xhr.open('POST', 'http://127.0.0.1:8000/logout/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
@@ -523,8 +576,8 @@
     clearData.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/clear-data/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
+        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/clear-data/');
+        xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
@@ -539,8 +592,8 @@
     deleteAccount.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/kill-account/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
+        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/kill-account/');
+        xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onload = function () {
             if (xhr.status === 200) {
@@ -570,9 +623,11 @@
         const result = event.results[event.resultIndex];
         const transcript = result[0].transcript;
         userInput.value = transcript;
+        handleFormSubmit();
     };
 
     startBtn.addEventListener('click', function () {
+        userInput.classList.add('animate-mic');
         recognition.start();
     });
 

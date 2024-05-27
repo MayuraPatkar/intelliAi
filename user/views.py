@@ -23,11 +23,9 @@ def hash_password(password):
     hashed_password = hashlib.sha256(password.encode()).hexdigest()
     return hashed_password
 
-
 def generate_session_token():
     token = secrets.token_urlsafe(16)
     return token
-
 
 def is_valid_session_token(session_token):
     if session_token:
@@ -40,6 +38,9 @@ def is_valid_session_token(session_token):
 
 
 # Create your views here.
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
 
 def index(request):
     session_token = request.COOKIES.get('session_token')
@@ -55,8 +56,14 @@ def intelliAi(request):
         user = collection.find_one({'session_token': session_token})
     return render(request, 'intelliAi.html')
 
+
 def signup(request):
-    if request.method == 'POST':
+    if 'session_token' in request.COOKIES:
+        session_token = request.COOKIES['session_token']
+        user = collection.find_one({'session_token': session_token})
+        if user:
+            return render(request, 'intelliAi.html')
+    elif request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -73,13 +80,17 @@ def signup(request):
             response.set_cookie('session_token', session_token, expires=expiry_date)
 
             return response
-
     else:
         return render(request, 'signup.html')
 
 # login
 def user_login(request):
-    if request.method == 'POST':
+    if 'session_token' in request.COOKIES:
+        session_token = request.COOKIES['session_token']
+        user = collection.find_one({'session_token': session_token})
+        if user:
+            return render(request, 'intelliAi.html')
+    elif request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
         hashed_password = hash_password(password)
