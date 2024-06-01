@@ -322,16 +322,6 @@
             cursor: pointer;
         }
 
-        .background-clip {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-
         input[type='submit'] {
             width: 100%;
             height: 100%;
@@ -392,8 +382,6 @@
         </form>
     </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const chatBox = document.querySelector('.chat-box');
@@ -469,36 +457,24 @@
 
     const form_ = document.querySelector('form');
     const submitButton = document.querySelector('.submit-button');
-    const generate = document.querySelector('.input-with-image');
 
     form_.addEventListener('submit', function (event) {
         event.preventDefault();
         handleFormSubmit();
         submitButton.classList.add('animate');
 
-        generate.innerHTML = `<div id="lottie-animation" class="background-clip"></div>`;
+        submitButton.addEventListener('animationend', function () {
+            submitButton.classList.remove('animate');
+        }, { once: true });
 
-        lottie.loadAnimation({
-            container: document.getElementById('lottie-animation'),
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: "{% static 'generate-animation.json' %}"
+        const user_input = document.getElementById('user-message');
+        user_input.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                handleFormSubmit();
+            }
+        });
     });
-
-    submitButton.addEventListener('animationend', function () {
-        submitButton.classList.remove('animate');
-    }, { once: true });
-
-    const user_input = document.getElementById('user-message');
-    user_input.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            handleFormSubmit();
-        }
-    });
-});
-
 
     function handleFormSubmit() {
         const prompt = document.getElementById('user-message').value.trim();
@@ -526,8 +502,6 @@
         xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
         xhr.onload = function () {
             if (xhr.status === 200) {
-                generate.innerHTML = `<input type="submit" value="Generate" class="submit-button">
-                    <img src="{% static 'yellowstar.png' %}" class="starlogo">`;
                 const response = JSON.parse(xhr.responseText);
                 appendMessage('ai', response.message);
             } else {
