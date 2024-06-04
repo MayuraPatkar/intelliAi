@@ -363,6 +363,7 @@
     const logout = document.getElementById('logout');
     const clearData = document.getElementById('clear-data');
     const deleteAccount = document.getElementById('delete-account');
+    let state = "recieved";
 
     window.onload = function () {
         loadChatHistory();
@@ -444,9 +445,10 @@
     }
 
     function sendPrompt(formData) {
+        state = "sending";
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/ai-response/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
+        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/ai-response/');
+        xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
@@ -454,6 +456,7 @@
             } else {
                 console.error('Request failed. Status: ' + xhr.status);
             }
+            state = "recieved";
         };
         xhr.send(formData);
     }
@@ -507,8 +510,8 @@
     logout.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/logout/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/logout/');
+        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/logout/');
+        xhr.open('POST', 'http://127.0.0.1:8000/logout/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
@@ -523,8 +526,8 @@
     clearData.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/clear-data/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
+        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/clear-data/');
+        xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
@@ -539,8 +542,8 @@
     deleteAccount.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/kill-account/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
+        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/kill-account/');
+        xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onload = function () {
             if (xhr.status === 200) {

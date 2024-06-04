@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import secrets
@@ -9,7 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from M68.response import get_response
 import hashlib
-from bson import ObjectId
 
 
 # Connect to MongoDB
@@ -40,6 +38,10 @@ def is_valid_session_token(session_token):
 
 
 # Create your views here.
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
+
 
 def index(request):
     session_token = request.COOKIES.get('session_token')
