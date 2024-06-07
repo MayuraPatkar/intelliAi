@@ -39,7 +39,7 @@
         }
 
         .header {
-            width: 80%;
+            width: 90%;
             height: 10%;
             display: flex;
             justify-content: space-between;
@@ -50,104 +50,130 @@
             height: 55px;
         }
 
-        #profile {
+        #profile-container {
+            position: relative;
+        }
+
+        #profile-button {
             width: 50px;
             height: 50px;
             cursor: pointer;
+            position: relative;
+            border-radius: 50px;
+            z-index: 1;
         }
 
-        #profile img {
+        #profile-button:hover {
+            box-shadow: 0px 4px 4px 0px #00000040;
+            background: #D6D6D61A;
+
+        }
+
+        #profile-button img {
             width: 50px;
             height: 50px;
         }
 
-        .backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-        }
-
-        .backdrop {
-            display: none;
-        }
-
-        .blurred-div {
-            padding: 1%;
+        .profile-menu {
             position: absolute;
-            align-items: center;
-            display: flex;
-            top: 120px;
-            flex-direction: column;
-            justify-content: center;
-            left: 90%;
-            transform: translateX(-50%);
-            border: solid 1px rgb(92, 92, 92);
+            top: 60px;
+            right: 0;
+            width: 200px;
+            background-color: #333;
             border-radius: 10px;
-            width: 18vw;
-            height: 20vh;
-            background-color: rgba(48, 48, 48);
-            transition: 1s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.5);
+            transform-origin: top right;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            animation: bounceOut 0.5s forwards;
         }
 
-        .blurred-div {
-            display: none;
+        .profile-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            animation: bounceIn 0.5s forwards;
         }
 
-        #logout {
-            width: 90%;
-            height: 25%;
-            margin-top: 10px;
-            cursor: pointer;
+        .profile-username {
+            color: #fff;
+            display: block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .logout-button {
+            background-color: #555;
             border: none;
-            background-color: #7E7E7E;
-            border-radius: 12px;
-        }
-
-        #logout:hover {
-            background-color: #acacac;
-        }
-
-        #clear-data {
-            width: 90%;
-            height: 25%;
-            margin-top: 10px;
+            border-radius: 5px;
+            color: #fff;
+            padding: 5px 10px;
             cursor: pointer;
-            border: none;
-            border-radius: 12px;
-            background-color: #7E7E7E;
+            display: block;
+            margin: 10px auto;
         }
 
-        #clear-data:hover {
-            background-color: #acacac;
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
-        #delete-account {
-            width: 90%;
-            height: 25%;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 12px;
-            border: none;
-            background-color: rgb(192, 27, 27);
-            color: white;
+        @keyframes bounceOut {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.9);
+            }
+
+            70% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(0.5);
+            }
         }
 
-        #delete-account:hover {
-            background-color: rgb(223, 47, 47);
-        }
 
         .chat-box {
             width: 50vw;
             height: 65vh;
             color: white;
-            overflow-y: scroll;
+            overflow-y: auto;
+        }
+
+        #h2 {
+            position: absolute;
+            top: 45%;
+            left: 35%;
+            font-size: 2rem;
+            font-family: "Pixelify Sans", sans-serif;
+            display: none;
         }
 
         .chat-box::-webkit-scrollbar {
             width: 8px;
+            display: none;
+        }
+
+        .chat-box:hover::-webkit-scrollbar {
+            display: block;
         }
 
         .chat-box::-webkit-scrollbar-track {
@@ -159,10 +185,6 @@
             background-color: #7E7E7E;
             border-radius: 50px;
             border: 2px solid #7E7E7E80;
-            width: 50px;
-            height: 20px;
-            margin-left: -15px;
-            margin-right: -15px;
         }
 
         .chat-box::-webkit-scrollbar-thumb:hover {
@@ -221,6 +243,8 @@
             justify-content: space-between;
             align-items: center;
             background: linear-gradient(148.6deg, rgba(214, 214, 214, 0.25) 0%, rgba(214, 214, 214, 0.025) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.123);
+            box-shadow: 0px 0px 1.99px 7.9px #FFFFFF1A;
         }
 
         #user-input>img {
@@ -234,6 +258,7 @@
             border-radius: 50px;
             width: 63%;
             height: 90%;
+            font-size: 1.1rem;
             font-family: "Pixelify Sans", sans-serif;
             background-color: transparent;
             outline: none;
@@ -244,17 +269,18 @@
         .alltgr {
             background: #D6D6D61A;
             border-radius: 50px;
-            height: 100%;
-            width: 35%;
+            height: 99%;
+            width: 30%;
             display: flex;
-            justify-content: space-evenly;
+            justify-content: space-between;
             align-items: center;
         }
 
         .abilities {
             height: 80%;
-            width: 45%;
+            width: 35%;
             border-radius: 50px;
+            margin-left: 2%;
             background: #D6D6D61A;
             display: flex;
             justify-content: center;
@@ -266,28 +292,44 @@
         }
 
         .custom-file-label {
+            width: 50%;
+            height: 100%;
+            border-top-right-radius: 50px;
+            border-bottom-right-radius: 50px;
             background-color: transparent;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         .custom-file-label img {
-            width: 50px;
-            height: 50px;
+            width: 65%;
+            height: 110%;
+            object-fit: cover;
+        }
+
+        .custom-file-label:hover {
+            background-color: #D6D6D61A;
+            ;
         }
 
         #startBtn {
-            width: 50px;
-            height: 50px;
+            width: 50%;
+            height: 100%;
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
             background-color: transparent;
             border: none;
             cursor: pointer;
-            color: white;
         }
 
         #startBtn img {
-            width: 50px;
-            height: 50px;
+            width: 70%;
+            height: 110%;
+            object-fit: cover;
+        }
+
+        #startBtn:hover {
+            background-color: #D6D6D61A;
         }
 
 
@@ -300,26 +342,27 @@
             cursor: pointer;
         }
 
-        input[type='submit'] {
-            width: 100%;
+        button[type="submit"] {
+            width: 60%;
             height: 100%;
+            font-size: 1.1rem;
             font-family: "Pixelify Sans", sans-serif;
             background: radial-gradient(100% 1362.48% at 0% 0%, #7420D5 0%, #6C16E4 100%);
             box-shadow: 0px 3.98px 1.99px 0px #FFFFFF40 inset;
             box-shadow: 0px -7.97px 3.98px 0px #00000040 inset;
             border: none;
             border-radius: 50px;
+            display: flex;
             color: white;
             cursor: pointer;
+            align-items: center;
+            justify-content: center;
         }
 
-        .starlogo {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            width: 20px;
-            height: auto;
+        button[type="submit"] img {
+            width: 25px;
+            height: 20px;
+            margin-left: 2px;
         }
     </style>
 </head>
@@ -328,17 +371,17 @@
     <div class="container">
         <div class="header">
             <img src="{% static 'logo.png' %}" class="logo">
-            <div id="profile" onclick="openmenu()">
-                <img src="{% static 'account.png' %}">
-            </div>
-            <div class="backdrop"></div>
-            <div class="blurred-div">
-                <button id="logout">Logout</button>
-                <button id="clear-data">Clear Data</button>
-                <button id="delete-account">Delete Account</button>
+            <div id="profile-container">
+                <img id="profile-button" src="{% static 'account.png' %}" class="profile-icon">
+                <div id="profile-menu" class="profile-menu">
+                    <span class="profile-username">rohan2003</span>
+                    <button class="logout-button">Logout</button>
+                </div>
             </div>
         </div>
-        <div class="chat-box" id="chat-box"></div>
+        <div class="chat-box" id="chat-box">
+            <p id="h2">How can I help you today?</p>
+        </div>
         <form id="user-input">
             <img src="{% static 'stars.png' %}">
             <input type="text" id="user-message" placeholder="Type something..." autocomplete="off">
@@ -348,10 +391,10 @@
                     <label for="image" class="custom-file-label"><img src="{% static 'image.png' %}"></label>
                     <input type="file" id="image" accept="image/*" class="custom-file-input">
                 </div>
-                <div class="input-with-image">
-                    <input type="submit" value="Generate" class="submit-button">
-                    <img src="{% static 'yellowstar.png' %}" class="starlogo">
-                </div>
+                <button type="submit" class="submit-button">
+                    Generate
+                    <img src="{% static 'yellowstar.png' %}" alt="Star">
+                </button>
             </div>
         </form>
     </div>
@@ -376,42 +419,36 @@
             .then(response => response.json())
             .then(data => {
                 const chatHistoryDiv = document.getElementById('chat-box');
-                chatHistoryDiv.innerHTML = '';
-
-                data.forEach(chat => {
-                    appendMessage('user', chat.prompt);
-                    appendMessage('ai', chat.response);
-                });
+                const h2 = document.getElementById('h2');
+                h2.style.display = 'block';
+                if (data != "") {
+                    chatHistoryDiv.innerHTML = '';
+                    data.forEach(chat => {
+                        appendMessage('user', chat.prompt);
+                        appendMessage('ai', chat.response);
+                    });
+                }
             })
             .catch(error => {
                 console.error('Error fetching chat history:', error);
             });
     }
 
-    function openmenu() {
-        const menu = document.querySelector(".blurred-div");
-        const backdrop = document.querySelector(".backdrop");
-
-        menu.classList.toggle('visible');
-
-        if (menu.classList.contains('visible')) {
-            backdrop.style.display = 'block';
-            menu.style.display = 'flex';
+    document.getElementById('profile-button').addEventListener('click', function () {
+        var menu = document.getElementById('profile-menu');
+        if (menu.classList.contains('show')) {
+            menu.classList.remove('show');
+            menu.style.animation = 'bounceOut 0.5s forwards';
         } else {
-            backdrop.style.display = 'none';
-            menu.style.display = 'none';
+            menu.classList.add('show');
+            menu.style.animation = 'bounceIn 0.5s forwards';
         }
+    });
 
-        backdrop.addEventListener('click', function (event) {
-            if (event.target === backdrop) {
-                menu.classList.remove('visible');
-                backdrop.style.display = 'none';
-                menu.style.display = 'none';
-            }
-        });
-    }
 
     form.addEventListener('submit', function (event) {
+        const h2 = document.getElementById('h2');
+        h2.style.display = 'none';
         event.preventDefault();
         handleFormSubmit();
     });
@@ -419,6 +456,8 @@
     const user_input = document.getElementById('user-message');
     user_input.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
+            const h2 = document.getElementById('h2');
+            h2.style.display = 'none';
             event.preventDefault();
             handleFormSubmit();
         }
@@ -447,8 +486,8 @@
     function sendPrompt(formData) {
         state = "sending";
         const xhr = new XMLHttpRequest();
-        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/ai-response/');
-        xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
+        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/ai-response/');
+        // xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
@@ -510,8 +549,8 @@
     logout.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/logout/');
-        xhr.open('POST', 'http://127.0.0.1:8000/logout/');
+        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/logout/');
+        // xhr.open('POST', 'http://127.0.0.1:8000/logout/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
@@ -526,12 +565,14 @@
     clearData.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/clear-data/');
-        xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
+        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/clear-data/');
+        // xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                chatBox.innerHTML = ``;
+                chatBox.innerHTML = `<p id="h2">How can I help you today?</p>`;
+                const h2 = document.getElementById('h2');
+                h2.style.display = 'block';
             } else {
                 console.error('Request failed. Status: ' + xhr.status);
             }
@@ -542,8 +583,8 @@
     deleteAccount.addEventListener('click', function (event) {
         event.preventDefault();
         const xhr = new XMLHttpRequest();
-        // xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/kill-account/');
-        xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
+        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/kill-account/');
+        // xhr.open('POST', 'http://127.0.0.1:8000/kill-account/');
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onload = function () {
             if (xhr.status === 200) {
