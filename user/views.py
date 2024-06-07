@@ -122,11 +122,7 @@ def get_conve_history(request):
                 }
                 for chat in chat_history
             ]
-            print(chat_history)
-            if chat_history_list:
-                return JsonResponse(chat_history_list, safe=False)
-            else:
-                return JsonResponse({'message': 'No conversation history found for this user'}, status=404)
+            return JsonResponse(chat_history_list, safe=False)
         else:
             return JsonResponse({'error': 'User not found'}, status=404)
     else:
