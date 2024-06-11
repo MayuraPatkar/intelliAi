@@ -57,6 +57,17 @@ def intelliAi(request):
         user = collection.find_one({'session_token': session_token})
     return render(request, 'intelliAi.html')
 
+def guest(request):
+    if 'session_token' in request.COOKIES:
+        session_token = request.COOKIES['session_token']
+        user = collection.find_one({'session_token': session_token})
+        if(user):
+            return render(request, 'intelliAi.html')
+        else:
+            return render(request, 'guest.html')
+    else:
+        return render(request, 'guest.html')
+
 def signup(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -73,6 +84,7 @@ def signup(request):
             collection.insert_one(user_data)
             response = redirect('intelliAi')
             response.set_cookie('session_token', session_token, expires=expiry_date)
+            response.set_cookie('usenmae', name)
 
             return response
 
@@ -85,16 +97,15 @@ def user_login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         hashed_password = hash_password(password)
-        print(hashed_password)
         user = collection.find_one({'email': email, 'password': hashed_password})
 
         if user:
-            print(user)
             session_token = generate_session_token()
             expiry_date = datetime.now() + timedelta(days=1)
             collection.update_one({'email': email}, {'$set': {'session_token': session_token, 'expiry_date': expiry_date}})
             response = redirect('intelliAi')
             response.set_cookie('session_token', session_token, expires=expiry_date)
+            response.set_cookie('username', user['name'])
             
             return response
         else:
@@ -146,6 +157,16 @@ def ai_response(request):
             
                 chat_history = {'ref': user_id, 'prompt': prompt, 'response': ai_response, 'timestamp': timestamp}
                 chat_history_collection.insert_one(chat_history)
+        
+        return JsonResponse({'message': ai_response})
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+@csrf_exempt
+def guest_ai_response(request):
+    if request.method == 'POST':
+        prompt = request.POST.get('prompt', '')
+        ai_response = get_response(prompt)
         
         return JsonResponse({'message': ai_response})
     else:
