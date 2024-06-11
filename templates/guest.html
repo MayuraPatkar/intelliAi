@@ -164,7 +164,7 @@
             left: 35%;
             font-size: 2rem;
             font-family: "Pixelify Sans", sans-serif;
-            display: none;
+            /* display: none; */
         }
 
         .chat-box::-webkit-scrollbar {
@@ -468,20 +468,9 @@
 
     clearData.addEventListener('click', function (event) {
         event.preventDefault();
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/clear-data/');
-        // xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                chatBox.innerHTML = `<p id="h2">How can I help you today?</p>`;
-                const h2 = document.getElementById('h2');
-                h2.style.display = 'block';
-            } else {
-                console.error('Request failed. Status: ' + xhr.status);
-            }
-        };
-        xhr.send();
+        chatBox.innerHTML = `<p id="h2">How can I help you today?</p>`;
+        const h2 = document.getElementById('h2');
+        h2.style.display = 'block';
     });
 
 </script>
