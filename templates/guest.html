@@ -1,0 +1,490 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'yellowstar.png' %}">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <title>IntelliAi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url("{% static 'arrowhead-rounded-outline (1).svg' %}"),
+            auto;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .container {
+            width: 90vw;
+            height: 90vh;
+            border-radius: 17px;
+            background: linear-gradient(148.6deg, rgba(214, 214, 214, 0.25) 0%, rgba(214, 214, 214, 0.025) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        .header {
+            width: 90%;
+            height: 10%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .logo {
+            width: 150px;
+            height: 55px;
+        }
+
+        #profile-container {
+            position: relative;
+        }
+
+        #profile-button {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            border-radius: 50px;
+            z-index: 1;
+        }
+
+        #profile-button:hover {
+            box-shadow: 0px 4px 4px 0px #00000040;
+            background: #D6D6D61A;
+
+        }
+
+        #profile-button img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            width: 200px;
+            background-color: #333;
+            border-radius: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.5);
+            transform-origin: top right;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            animation: bounceOut 0.5s forwards;
+        }
+
+        .profile-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            animation: bounceIn 0.5s forwards;
+        }
+
+        .profile-username {
+            color: #fff;
+            display: block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .Sign-up-button {
+            background-color: #555;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            padding: 5px 10px;
+            display: block;
+            margin: 10px auto;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounceOut {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.9);
+            }
+
+            70% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(0.5);
+            }
+        }
+
+
+        .chat-box {
+            width: 50vw;
+            height: 65vh;
+            color: white;
+            overflow-y: auto;
+        }
+
+        #h2 {
+            position: absolute;
+            top: 45%;
+            left: 35%;
+            font-size: 2rem;
+            font-family: "Pixelify Sans", sans-serif;
+            display: none;
+        }
+
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+            display: none;
+        }
+
+        .chat-box:hover::-webkit-scrollbar {
+            display: block;
+        }
+
+        .chat-box::-webkit-scrollbar-track {
+            background-color: #7E7E7E80;
+            border-radius: 50px;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background-color: #7E7E7E;
+            border-radius: 50px;
+            border: 2px solid #7E7E7E80;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb:hover {
+            background-color: #bbbbbb;
+        }
+
+
+        .user-message {
+            padding: 10px;
+            display: flex;
+            margin-top: 20px;
+            font-family: "Roboto", sans-serif;
+        }
+
+        @font-face {
+            font-family: 'Pixelify Sans';
+            src: url("{% static 'PixelifySans-Medium.ttf' %}") format('truetype');
+        }
+
+        .user-message p {
+            font-family: "Pixelify Sans", sans-serif;
+        }
+
+        .user-message img {
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
+        }
+
+        .ai-message {
+            padding: 10px;
+            display: flex;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .ai-message img {
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
+        }
+
+        .ai-message p {
+            font-family: "Pixelify Sans", sans-serif;
+        }
+
+        #user-input {
+            width: 50vw;
+            height: 6%;
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(148.6deg, rgba(214, 214, 214, 0.25) 0%, rgba(214, 214, 214, 0.025) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.123);
+            box-shadow: 0px 0px 1.99px 7.9px #FFFFFF1A;
+        }
+
+        #user-input>img {
+            margin-left: 10px;
+            width: 30px;
+            height: 30px;
+        }
+
+        input[type='text'] {
+            padding-left: 20px;
+            border-radius: 50px;
+            width: 100%;
+            height: 90%;
+            font-size: 1.1rem;
+            font-family: "Pixelify Sans", sans-serif;
+            background-color: transparent;
+            outline: none;
+            border: none;
+            color: white;
+        }
+
+        .alltgr {
+            background: #D6D6D61A;
+            border-radius: 50px;
+            height: 99%;
+            width: 30%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            height: 100%;
+            font-size: 1.1rem;
+            font-family: "Pixelify Sans", sans-serif;
+            background: radial-gradient(100% 1362.48% at 0% 0%, #7420D5 0%, #6C16E4 100%);
+            box-shadow: 0px 3.98px 1.99px 0px #FFFFFF40 inset;
+            box-shadow: 0px -7.97px 3.98px 0px #00000040 inset;
+            border: none;
+            border-radius: 50px;
+            display: flex;
+            color: white;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .submit-button img {
+            width: 25px;
+            height: 20px;
+            margin-left: 2px;
+        }
+
+        .submit-button .button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        #animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{% static 'logo.png' %}" class="logo">
+            <div id="profile-container">
+                <img id="profile-button" src="{% static 'account.png' %}" class="profile-icon">
+                <div id="profile-menu" class="profile-menu">
+                    <button class="Sign-up-button" id="Sign-up">Sign up</button>
+                    <button class="Sign-up-button" id="clear-data">clear Data</button>
+                </div>
+            </div>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <p id="h2">How can I help you today?</p>
+        </div>
+        <form id="user-input">
+            <img src="{% static 'stars.png' %}">
+            <input type="text" id="user-message" placeholder="Type something..." autocomplete="off">
+            <div class="alltgr">
+                <button type="submit" class="submit-button">
+                    <div class="button-content">
+                        Generate
+                        <img src="{% static 'yellowstar.png' %}" alt="Star">
+                    </div>
+                    <div id="animation-container"></div>
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const form = document.getElementById('user-input');
+    const user_input = document.getElementById('user-message');
+    const sign_up = document.getElementById('Sign-up');
+    const clearData = document.getElementById('clear-data');
+    const buttonContent = document.querySelector('.button-content');
+    const animationContainer = document.getElementById('animation-container');
+
+    document.getElementById('profile-button').addEventListener('click', function () {
+        var menu = document.getElementById('profile-menu');
+        if (menu.classList.contains('show')) {
+            menu.classList.remove('show');
+            menu.style.animation = 'bounceOut 0.5s forwards';
+        } else {
+            menu.classList.add('show');
+            menu.style.animation = 'bounceIn 0.5s forwards';
+        }
+    });
+
+    function loadAnimation() {
+        animationContainer.style.display = 'flex';
+        return lottie.loadAnimation({
+            container: animationContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "{% static 'generate-animation.json' %}"
+        });
+    }
+
+    form.addEventListener('submit', function (event) {
+        if (user_input.value != "") {
+            const h2 = document.getElementById('h2');
+            if (h2)
+                h2.style.display = 'none';
+            event.preventDefault();
+            buttonContent.style.display = 'none';
+            const animationInstance = loadAnimation();
+            handleFormSubmit(animationInstance);
+        }
+    });
+
+    user_input.addEventListener('keydown', function (event) {
+        if (user_input.value != '') {
+            if (event.key === 'Enter') {
+                const h2 = document.getElementById('h2');
+                h2.style.display = 'none';
+                event.preventDefault();
+                buttonContent.style.display = 'none';
+                const animationInstance = loadAnimation();
+                handleFormSubmit(animationInstance);
+            }
+        }
+    });
+
+    function handleFormSubmit(animationInstance) {
+        const prompt = document.getElementById('user-message').value.trim();
+
+        if (prompt || image) {
+            const formData = new FormData();
+            formData.append('prompt', prompt);
+            appendMessage('user', prompt);
+            sendPrompt(formData, animationInstance);
+
+            document.getElementById('user-message').value = '';
+        }
+    }
+
+    function sendPrompt(formData, animationInstance) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/guest-ai-response/');
+        // xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                appendMessage('ai', response.message);
+            } else {
+                console.error('Request failed. Status: ' + xhr.status);
+            }
+            animationInstance.stop();
+            animationInstance.destroy();
+            animationContainer.style.display = 'none';
+            buttonContent.style.display = 'flex';
+        };
+        xhr.send(formData);
+    }
+
+    function appendMessage(sender, message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add(sender + '-message');
+
+        if (sender == "user") {
+            const userIcon = document.createElement('img');
+            userIcon.src = "{% static 'account.png' %}";
+            userIcon.classList.add('user-icon');
+
+            const userMessage = document.createElement('div');
+            userMessage.innerHTML = "<p>You</p> <br>" + message;
+
+            messageElement.appendChild(userIcon);
+            messageElement.appendChild(userMessage);
+        } else {
+            const aiIcon = document.createElement('img');
+            aiIcon.src = "{% static 'stars.png' %}";
+            aiIcon.classList.add('ai-icon');
+
+            const aiResponse = document.createElement('div');
+            aiResponse.innerHTML = "<p>IntelliAi</p> <br>" + message;
+
+            messageElement.appendChild(aiIcon);
+            messageElement.appendChild(aiResponse);
+        }
+
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    sign_up.addEventListener('click', function (event) {
+        window.location = "/signup";
+    });
+
+    clearData.addEventListener('click', function (event) {
+        event.preventDefault();
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/clear-data/');
+        // xhr.open('POST', 'http://127.0.0.1:8000/clear-data/');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                chatBox.innerHTML = `<p id="h2">How can I help you today?</p>`;
+                const h2 = document.getElementById('h2');
+                h2.style.display = 'block';
+            } else {
+                console.error('Request failed. Status: ' + xhr.status);
+            }
+        };
+        xhr.send();
+    });
+
+</script>
+
+
+</html>
