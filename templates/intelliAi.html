@@ -15,6 +15,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: url("{% static 'arrowhead-rounded-outline (1).svg' %}"),
+            auto;
         }
 
         body {
@@ -57,7 +59,6 @@
         #profile-button {
             width: 50px;
             height: 50px;
-            cursor: pointer;
             position: relative;
             border-radius: 50px;
             z-index: 1;
@@ -109,9 +110,12 @@
             border-radius: 5px;
             color: #fff;
             padding: 5px 10px;
-            cursor: pointer;
             display: block;
             margin: 10px auto;
+        }
+
+        .logout-button:hover {
+            background-color: #676767;
         }
 
         @keyframes bounceIn {
@@ -297,7 +301,6 @@
             border-top-right-radius: 50px;
             border-bottom-right-radius: 50px;
             background-color: transparent;
-            cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
@@ -319,7 +322,6 @@
             border-bottom-left-radius: 50px;
             background-color: transparent;
             border: none;
-            cursor: pointer;
         }
 
         #startBtn img {
@@ -339,7 +341,6 @@
             border-radius: 50px;
             position: relative;
             display: inline-block;
-            cursor: pointer;
         }
 
         button[type="submit"] {
@@ -354,17 +355,38 @@
             border-radius: 50px;
             display: flex;
             color: white;
-            cursor: pointer;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
 
-        button[type="submit"] img {
+        button[type="submit"]:hover {
+            background: radial-gradient(100% 1362.48% at 0% 0%, #8c28ff 0%, #7919ff 100%);
+        }
+
+        .submit-button img {
             width: 25px;
             height: 20px;
             margin-left: 2px;
         }
+
+        .submit-button .button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        #animation-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
+
 </head>
 
 <body>
@@ -374,8 +396,25 @@
             <div id="profile-container">
                 <img id="profile-button" src="{% static 'account.png' %}" class="profile-icon">
                 <div id="profile-menu" class="profile-menu">
-                    <span class="profile-username">rohan2003</span>
-                    <button class="logout-button">Logout</button>
+                    <span class="profile-username"></span>
+                    <script>
+                        function getCookie(name) {
+                            let value = "; " + document.cookie;
+                            let parts = value.split("; " + name + "=");
+                            if (parts.length == 2) return parts.pop().split(";").shift();
+                        }
+
+                        function displayUsername() {
+                            let username = getCookie('username');
+                            if (username) {
+                                document.querySelector('.profile-username').textContent = username;
+                            }
+                        }
+                        displayUsername()
+                    </script>
+                    <button class="logout-button" id="logout">Logout</button>
+                    <button class="logout-button" id="clear-data">clear Data</button>
+                    <button class="logout-button" id="delete-account">Delete Account</button>
                 </div>
             </div>
         </div>
@@ -392,21 +431,26 @@
                     <input type="file" id="image" accept="image/*" class="custom-file-input">
                 </div>
                 <button type="submit" class="submit-button">
-                    Generate
-                    <img src="{% static 'yellowstar.png' %}" alt="Star">
+                    <div class="button-content">
+                        Generate
+                        <img src="{% static 'yellowstar.png' %}" alt="Star">
+                    </div>
+                    <div id="animation-container"></div>
                 </button>
             </div>
         </form>
     </div>
 </body>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
 <script>
     const chatBox = document.getElementById('chat-box');
     const form = document.getElementById('user-input');
+    const user_input = document.getElementById('user-message');
     const logout = document.getElementById('logout');
     const clearData = document.getElementById('clear-data');
     const deleteAccount = document.getElementById('delete-account');
-    let state = "recieved";
+    const buttonContent = document.querySelector('.button-content');
+    const animationContainer = document.getElementById('animation-container');
 
     window.onload = function () {
         loadChatHistory();
@@ -445,25 +489,43 @@
         }
     });
 
+    function loadAnimation() {
+        animationContainer.style.display = 'flex';
+        return lottie.loadAnimation({
+            container: animationContainer,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "{% static 'generate-animation.json' %}"
+        });
+    }
 
     form.addEventListener('submit', function (event) {
-        const h2 = document.getElementById('h2');
-        h2.style.display = 'none';
-        event.preventDefault();
-        handleFormSubmit();
-    });
-
-    const user_input = document.getElementById('user-message');
-    user_input.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
+        if (user_input.value != "") {
             const h2 = document.getElementById('h2');
-            h2.style.display = 'none';
+            if (h2)
+                h2.style.display = 'none';
             event.preventDefault();
-            handleFormSubmit();
+            buttonContent.style.display = 'none';
+            const animationInstance = loadAnimation();
+            handleFormSubmit(animationInstance);
         }
     });
 
-    function handleFormSubmit() {
+    user_input.addEventListener('keydown', function (event) {
+        if (user_input.value != '') {
+            if (event.key === 'Enter') {
+                const h2 = document.getElementById('h2');
+                h2.style.display = 'none';
+                event.preventDefault();
+                buttonContent.style.display = 'none';
+                const animationInstance = loadAnimation();
+                handleFormSubmit(animationInstance);
+            }
+        }
+    });
+
+    function handleFormSubmit(animationInstance) {
         const prompt = document.getElementById('user-message').value.trim();
         const image = document.getElementById('image').files[0];
 
@@ -476,15 +538,14 @@
             }
 
             appendMessage('user', prompt);
-            sendPrompt(formData);
+            sendPrompt(formData, animationInstance);
 
             document.getElementById('user-message').value = '';
             document.getElementById('image').value = '';
         }
     }
 
-    function sendPrompt(formData) {
-        state = "sending";
+    function sendPrompt(formData, animationInstance) {
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://7ckg460s-8000.inc1.devtunnels.ms/ai-response/');
         // xhr.open('POST', 'http://127.0.0.1:8000/ai-response/');
@@ -495,7 +556,10 @@
             } else {
                 console.error('Request failed. Status: ' + xhr.status);
             }
-            state = "recieved";
+            animationInstance.stop();
+            animationInstance.destroy();
+            animationContainer.style.display = 'none';
+            buttonContent.style.display = 'flex';
         };
         xhr.send(formData);
     }
