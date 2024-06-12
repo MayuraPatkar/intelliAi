@@ -23,6 +23,7 @@
             width: 100vw;
             height: 100vh;
             background-color: #000000;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -53,120 +54,88 @@
         }
 
         #profile-container {
-            width: 55px;
-            height: 55px;
-            padding: 1%;
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
             display: flex;
             justify-content: space-evenly;
             align-items: center;
+            border: 2px solid #D6D6D61A;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
             font-family: "Pixelify Sans", sans-serif;
-            transition: transform 1s ease, opacity 0.5s ease;
+            transition: width 1s ease, background-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        #profile-container:hover {
+            box-shadow: 0px 4px 4px 0px #00000040;
+            background-color: #D6D6D61A;
         }
 
         #profile-container.expand {
-            width: 250px;
-            background: #D6D6D61A;
-            border-radius: 50px;
-            height: 55px;
-            transition: transform 1s ease, opacity 0.5s ease;
+            width: 200px;
+            background-color: #D6D6D61A;
+            padding: 1%;
         }
 
         #profile-button {
-            width: 50px;
-            height: 50px;
-            position: relative;
+            width: 40px;
+            height: 40px;
             border-radius: 50px;
             cursor: url("{% static 'pointer-cursor.svg' %}"), auto;
-
-        }
-
-        #profile-button:hover {
-            box-shadow: 0px 4px 4px 0px #00000040;
-            background: #D6D6D61A;
         }
 
         #profile-button img {
-            width: 50px;
-            height: 50px;
-        }
-
-        .profile-menu {
-            display: none;
-            justify-content: space-evenly;
-            align-items: center;
-            width: 200px;
-            border-radius: 50px;
-            opacity: 0;
-            transform-origin: top right;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            /* animation: bounceOut 0.5s forwards; */
-        }
-
-        .profile-menu.show {
-            opacity: 1;
-            display: flex;
-            /* animation: bounceIn 0.5s forwards; */
+            width: 100%;
+            height: 100%;
         }
 
         .profile-username {
-            color: #fff;
-            display: block;
-            text-align: center;
+            opacity: 0;
+            display: none;
+            transition: opacity 1s ease 5s;
         }
 
-        .logout-button {
-            background-color: #555;
-            border: none;
+        .profile-username.show {
+            opacity: 1;
+            display: block;
+            transition-delay: 5s;
+        }
+
+        .setting-button {
+            border: 2px solid #555;
+            background-color: #D6D6D61A;
+            display: none;
+            justify-content: center;
+            align-items: center;
             border-radius: 50px;
             color: #fff;
-            width: 100px;
+            width: 40px;
+            opacity: 0;
             height: 40px;
             font-size: 0.9rem;
-            display: block;
-            cursor: url("{% static 'pointer-cursor.svg' %}"), auto;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
             font-family: "Pixelify Sans", sans-serif;
         }
 
-        .logout-button:hover {
-            background-color: #676767;
+        .setting-button img {
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
         }
 
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.5);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            70% {
-                transform: scale(0.9);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+        .setting-button:hover {
+            background-color: #D6D6D61A;
         }
 
-        @keyframes bounceOut {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(0.9);
-            }
-
-            70% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(0.5);
-            }
+        .setting-button.show {
+            opacity: 1;
+            display: flex;
         }
 
+        .settings {
+            display: none;
+        }
 
         .chat-box {
             width: 50vw;
@@ -421,29 +390,49 @@
         <div class="header">
             <img src="{% static 'logo.png' %}" class="logo">
             <div id="profile-container">
-                <img id="profile-button" src="{% static 'account.png' %}" class="profile-icon">
-                <div id="profile-menu" class="profile-menu">
-                    <span class="profile-username"></span>
-                    <script>
-                        function getCookie(name) {
-                            let value = "; " + document.cookie;
-                            let parts = value.split("; " + name + "=");
-                            if (parts.length == 2) return parts.pop().split(";").shift();
-                        }
+                <img id="profile-button" src="{% static 'profile.png' %}" class="profile-icon">
+                <span class="profile-username" id="profile-username"></span>
+                <script>
+                    function getCookie(name) {
+                        let value = "; " + document.cookie;
+                        let parts = value.split("; " + name + "=");
+                        if (parts.length == 2) return parts.pop().split(";").shift();
+                    }
 
-                        function displayUsername() {
-                            let username = getCookie('username');
-                            if (username) {
-                                document.querySelector('.profile-username').textContent = username;
-                            }
+                    function displayUsername() {
+                        let username = getCookie('username');
+                        if (username) {
+                            document.querySelector('.profile-username').textContent = username;
                         }
-                        displayUsername()
-                    </script>
-                    <button class="logout-button" id="logout">Logout</button>
-                    <!-- <button class="logout-button" id="clear-data">clear Data</button>
-                    <button class="logout-button" id="delete-account">Delete Account</button> -->
+                    }
+                    displayUsername()
+                </script>
+                <button class="setting-button" id="setting-button"><img src="{% static 'settings.png' %}"></button>
+                <div class="settings">
+                    <button class="logout-button" id="logout">settings</button>
+                    <button class="logout-button" id="clear-data">clear Data</button>
+                    <button class="logout-button" id="delete-account">Delete Account</button>
                 </div>
             </div>
+            <script>
+                document.getElementById('profile-button').addEventListener('click', function () {
+                    var profile_container = document.getElementById('profile-container');
+                    var profile_button = document.getElementById('profile-button');
+                    var profile_username = document.getElementById('profile-username');
+                    var setting_button = document.getElementById('setting-button');
+
+                    if (profile_container.classList.contains('expand')) {
+                        profile_container.classList.remove('expand');
+                        profile_username.classList.remove('show');
+                        setting_button.classList.remove('show');
+                    } else {
+                        profile_container.classList.add('expand');
+                        setTimeout(() => {},1000);
+                        profile_username.classList.add('show');
+                        setting_button.classList.add('show');
+                    }
+                });
+            </script>
         </div>
         <div class="chat-box" id="chat-box">
             <p id="h2">How can I help you today?</p>
@@ -504,20 +493,6 @@
                 console.error('Error fetching chat history:', error);
             });
     }
-
-    document.getElementById('profile-button').addEventListener('click', function () {
-        var profile_container = document.getElementById('profile-container');
-        var menu = document.getElementById('profile-menu');
-        if (menu.classList.contains('show')) {
-            menu.classList.remove('show');
-            profile_container.classList.remove('expand');
-            // menu.style.animation = 'bounceOut 0.5s forwards';
-        } else {
-            menu.classList.add('show');
-            profile_container.classList.add('expand');
-            // menu.style.animation = 'bounceIn 0.5s forwards';
-        }
-    });
 
     function loadAnimation() {
         animationContainer.style.display = 'flex';
