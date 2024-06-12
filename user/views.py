@@ -45,9 +45,12 @@ def custom_404(request, exception):
 
 def index(request):
     session_token = request.COOKIES.get('session_token')
-
-    if is_valid_session_token(session_token):
-        return render(request, 'intelliAi.html')
+    user = collection.find_one({'session_token': session_token})
+    
+    if session_token and is_valid_session_token(session_token) and user:
+        response = render(request, 'intelliAi.html')
+        response.set_cookie('username', user['name'])
+        return response
     else:
         return render(request, 'landingPage.html')
 
