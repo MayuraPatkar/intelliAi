@@ -57,14 +57,13 @@
             width: 50px;
             height: 50px;
             border-radius: 50px;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
             border: 2px solid #D6D6D61A;
+            display: grid;
+            align-items: center;
             cursor: url("{% static 'pointer-cursor.svg' %}"),
             auto;
             font-family: "Pixelify Sans", sans-serif;
-            transition: width 1s ease, background-color 0.5s ease, box-shadow 0.5s ease;
+            transition: width 1s ease, height 1s ease, background-color 0.5s ease, box-shadow 0.5s ease;
         }
 
         #profile-container:hover {
@@ -74,7 +73,22 @@
 
         #profile-container.expand {
             width: 200px;
+            display: flex;
+            justify-content: space-evenly;
             background-color: #D6D6D61A;
+        }
+
+        .pro_sub {
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        #profile-container.expand-again {
+            height: 250px;
+            background-color: #D6D6D61A;
+            flex-direction: column;
             padding: 1%;
         }
 
@@ -82,7 +96,9 @@
             width: 40px;
             height: 40px;
             border-radius: 50px;
-            cursor: url("{% static 'pointer-cursor.svg' %}"), auto;
+            align-self: center;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
         }
 
         #profile-button img {
@@ -135,6 +151,27 @@
 
         .settings {
             display: none;
+        }
+
+        .settings.show {
+            width: 80%;
+            height: 75%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+
+        .settings button {
+            border: 2px solid #555;
+            background-color: #D6D6D61A;
+            border-radius: 50px;
+            color: #fff;
+            width: 100%;
+            height: 40px;
+            font-size: 0.9rem;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
+            font-family: "Pixelify Sans", sans-serif;
         }
 
         .chat-box {
@@ -382,57 +419,95 @@
             justify-content: center;
         }
     </style>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+        integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <img src="{% static 'logo.png' %}" class="logo">
+            <img src="{% static 'logo.png' %}" class="logo" onclick="window.location = '/'">
             <div id="profile-container">
-                <img id="profile-button" src="{% static 'profile.png' %}" class="profile-icon">
-                <span class="profile-username" id="profile-username"></span>
-                <script>
-                    function getCookie(name) {
-                        let value = "; " + document.cookie;
-                        let parts = value.split("; " + name + "=");
-                        if (parts.length == 2) return parts.pop().split(";").shift();
-                    }
-
-                    function displayUsername() {
-                        let username = getCookie('username');
-                        if (username) {
-                            document.querySelector('.profile-username').textContent = username;
+                <div class="pro_sub">
+                    <img id="profile-button" src="{% static 'profile.png' %}" class="profile-icon">
+                    <span class="profile-username" id="profile-username"></span>
+                    <script>
+                        function getCookie(name) {
+                            let value = "; " + document.cookie;
+                            let parts = value.split("; " + name + "=");
+                            if (parts.length == 2) return parts.pop().split(";").shift();
                         }
-                    }
-                    displayUsername()
-                </script>
-                <button class="setting-button" id="setting-button"><img src="{% static 'settings.png' %}"></button>
-                <div class="settings">
-                    <button class="logout-button" id="logout">settings</button>
-                    <button class="logout-button" id="clear-data">clear Data</button>
+
+                        function displayUsername() {
+                            let username = getCookie('username');
+                            if (username) {
+                                document.querySelector('.profile-username').textContent = username;
+                            }
+                        }
+                        displayUsername()
+                    </script>
+                    <button class="setting-button" id="setting-button"><img src="{% static 'settings.png' %}"></button>
+                </div>
+                <div class="settings" id="settings">
+                    <button class="logout-button" id="logout">Logout</button>
+                    <button class="logout-button" id="clear-data">Clear Data</button>
                     <button class="logout-button" id="delete-account">Delete Account</button>
                 </div>
             </div>
             <script>
-                document.getElementById('profile-button').addEventListener('click', function () {
-                    var profile_container = document.getElementById('profile-container');
-                    var profile_button = document.getElementById('profile-button');
-                    var profile_username = document.getElementById('profile-username');
-                    var setting_button = document.getElementById('setting-button');
-
+                var profile_container = document.getElementById('profile-container');
+                var profile_button = document.getElementById('profile-button');
+                var profile_username = document.getElementById('profile-username');
+                var setting_button = document.getElementById('setting-button');
+                var settings = document.getElementById('settings');
+            
+                // Define the event handler functions
+                function profileButtonClickHandler(event) {
+                    event.stopPropagation(); // Prevent the click from propagating to the document
                     if (profile_container.classList.contains('expand')) {
                         profile_container.classList.remove('expand');
                         profile_username.classList.remove('show');
                         setting_button.classList.remove('show');
                     } else {
                         profile_container.classList.add('expand');
-                        setTimeout(() => {},1000);
                         profile_username.classList.add('show');
                         setting_button.classList.add('show');
                     }
-                });
+                }
+            
+                function settingButtonClickHandler(event) {
+                    event.stopPropagation(); // Prevent the click from propagating to the document
+                    if (profile_container.classList.contains('expand-again')) {
+                        profile_button.addEventListener('click', profileButtonClickHandler);
+                        profile_container.classList.remove('expand-again');
+                        settings.classList.remove('show');
+                    } else {
+                        profile_button.removeEventListener('click', profileButtonClickHandler);
+                        profile_container.classList.add('expand-again');
+                        settings.classList.add('show');
+                    }
+                }
+            
+                function documentClickHandler(event) {
+                    if (!profile_container.contains(event.target) && !profile_button.contains(event.target) && !setting_button.contains(event.target) && !settings.contains(event.target)) {
+                        profile_container.classList.remove('expand');
+                        profile_container.classList.remove('expand-again');
+                        profile_username.classList.remove('show');
+                        setting_button.classList.remove('show');
+                        settings.classList.remove('show');
+            
+                        // Ensure the profile button click handler is re-attached if removed
+                        profile_button.addEventListener('click', profileButtonClickHandler);
+                    }
+                }
+            
+                // Attach the event listeners
+                profile_button.addEventListener('click', profileButtonClickHandler);
+                setting_button.addEventListener('click', settingButtonClickHandler);
+                document.addEventListener('click', documentClickHandler);
             </script>
+            
         </div>
         <div class="chat-box" id="chat-box">
             <p id="h2">How can I help you today?</p>
@@ -577,7 +652,7 @@
 
         if (sender == "user") {
             const userIcon = document.createElement('img');
-            userIcon.src = "{% static 'account.png' %}";
+            userIcon.src = "{% static 'profile.png' %}";
             userIcon.classList.add('user-icon');
 
             const userMessage = document.createElement('div');
@@ -693,11 +768,11 @@
         recognition.start();
     });
 
-    userInput.addEventListener('keydown', function (event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-        }
-    });
+    // userInput.addEventListener('keydown', function (event) {
+    //     if (event.keyCode === 13) {
+    //         event.preventDefault();
+    //     }
+    // });
 </script>
 
 

@@ -155,8 +155,7 @@
     }
 
     .container {
-      width: 25%;
-      padding: 20px;
+      padding: 2%;
       border-radius: 34px;
       background: rgba(255, 255, 255, 0.2);
       display: flex;
@@ -203,7 +202,7 @@
     .form input[type="submit"] {
       background-color: rgba(255, 255, 255, 0.2);
       color: white;
-      cursor: pointer;
+      cursor: url("{% static 'pointer-cursor.svg' %}"), auto;
       transition: background-color 0.3s;
     }
 
@@ -214,6 +213,7 @@
     .form p a {
       color: white;
       text-decoration: none;
+      cursor: url("{% static 'pointer-cursor.svg' %}"), auto;
     }
 
     .form p a:hover {
@@ -234,7 +234,7 @@
     <img src="{% static 'star.png' %}" class="star star-7">
     <img src="{% static 'star.png' %}" class="star star-8">
     <img src="{% static 'star.png' %}" class="star star-9">
-    <img src="{% static 'logo.png' %}" class="logo">
+    <img src="{% static 'logo.png' %}" class="logo" onclick="window.location = '/'">
     <div class="container">
       <form class="form" id="signup-form" method="POST" onsubmit="return validateForm()">
         {% csrf_token %}
