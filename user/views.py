@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import secrets
@@ -76,23 +77,28 @@ def signup(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         password = request.POST.get('password')
-
         if collection.find_one({'email': email}):
-            return render(request, 'signup.html', {'error_message': 'User already exists. Please log in.'})
+            messages.error(request, 'This email is already registered.')
+            return redirect('signup')
         else:
             hashed_password = hash_password(password)
             session_token = generate_session_token()
             expiry_date = datetime.now() + timedelta(days=1)
-            user_data = {'name': name, 'email': email, 'password': hashed_password, 'session_token': session_token, 'expiry_date': expiry_date}
+            user_data = {
+                'name': name,
+                'email': email,
+                'password': hashed_password,
+                'session_token': session_token,
+                'expiry_date': expiry_date
+            }
             collection.insert_one(user_data)
             response = redirect('intelliAi')
             response.set_cookie('session_token', session_token, expires=expiry_date)
-            response.set_cookie('usenmae', name)
+            response.set_cookie('username', name)
 
             return response
 
-    else:
-        return render(request, 'signup.html')
+    return render(request, 'signup.html')
 
 # login
 def user_login(request):
