@@ -23,6 +23,7 @@
             width: 100vw;
             height: 100vh;
             background-color: #000000;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -53,103 +54,127 @@
         }
 
         #profile-container {
-            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            border: 2px solid #D6D6D61A;
+            display: grid;
+            align-items: center;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
+            font-family: "Pixelify Sans", sans-serif;
+            transition: width 1s ease, height 1s ease, background-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        #profile-container:hover {
+            box-shadow: 0px 4px 4px 0px #00000040;
+            background-color: #D6D6D61A;
+        }
+
+        #profile-container.expand {
+            width: 200px;
+            display: flex;
+            justify-content: space-evenly;
+            background-color: #D6D6D61A;
+        }
+
+        .pro_sub {
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        #profile-container.expand-again {
+            height: 200px;
+            background-color: #D6D6D61A;
+            flex-direction: column;
+            padding: 1%;
         }
 
         #profile-button {
-            width: 50px;
-            height: 50px;
-            position: relative;
+            width: 40px;
+            height: 40px;
             border-radius: 50px;
-            z-index: 1;
-        }
-
-        #profile-button:hover {
-            box-shadow: 0px 4px 4px 0px #00000040;
-            background: #D6D6D61A;
-
+            align-self: center;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
         }
 
         #profile-button img {
-            width: 50px;
-            height: 50px;
-        }
-
-        .profile-menu {
-            position: absolute;
-            top: 60px;
-            right: 0;
-            width: 200px;
-            background-color: #333;
-            border-radius: 10px;
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.5);
-            transform-origin: top right;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            animation: bounceOut 0.5s forwards;
-        }
-
-        .profile-menu.show {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1);
-            animation: bounceIn 0.5s forwards;
+            width: 100%;
+            height: 100%;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
         }
 
         .profile-username {
-            color: #fff;
+            opacity: 0;
+            display: none;
+            transition: opacity 1s ease 5s;
+        }
+
+        .profile-username.show {
+            opacity: 1;
             display: block;
-            margin: 10px;
-            text-align: center;
+            transition-delay: 5s;
         }
 
-        .Sign-up-button {
-            background-color: #555;
-            border: none;
-            border-radius: 5px;
+        .setting-button {
+            border: 2px solid #555;
+            background-color: #D6D6D61A;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50px;
             color: #fff;
-            padding: 5px 10px;
-            display: block;
-            margin: 10px auto;
+            width: 40px;
+            opacity: 0;
+            height: 40px;
+            font-size: 0.9rem;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
+            font-family: "Pixelify Sans", sans-serif;
         }
 
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.5);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            70% {
-                transform: scale(0.9);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+        .setting-button img {
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
         }
 
-        @keyframes bounceOut {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(0.9);
-            }
-
-            70% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(0.5);
-            }
+        .setting-button:hover {
+            background-color: #D6D6D61A;
         }
 
+        .setting-button.show {
+            opacity: 1;
+            display: flex;
+        }
+
+        .settings {
+            display: none;
+        }
+
+        .settings.show {
+            width: 80%;
+            height: 75%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+
+        .settings button {
+            border: 2px solid #555;
+            background-color: #D6D6D61A;
+            border-radius: 50px;
+            color: #fff;
+            width: 100%;
+            height: 40px;
+            font-size: 0.9rem;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
+            font-family: "Pixelify Sans", sans-serif;
+        }
 
         .chat-box {
             width: 50vw;
@@ -164,7 +189,6 @@
             left: 35%;
             font-size: 2rem;
             font-family: "Pixelify Sans", sans-serif;
-            /* display: none; */
         }
 
         .chat-box::-webkit-scrollbar {
@@ -197,6 +221,11 @@
             display: flex;
             margin-top: 20px;
             font-family: "Roboto", sans-serif;
+        }
+
+        .user-imageMessage {
+            margin-top: 20px;
+            margin-left: 50px;
         }
 
         @font-face {
@@ -286,17 +315,27 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
+        }
+
+        button[type="submit"]:hover {
+            background: radial-gradient(100% 1362.48% at 0% 0%, #8c28ff 0%, #7919ff 100%);
         }
 
         .submit-button img {
             width: 25px;
             height: 20px;
             margin-left: 2px;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
         }
 
         .submit-button .button-content {
             display: flex;
             align-items: center;
+            cursor: url("{% static 'pointer-cursor.svg' %}"),
+            auto;
         }
 
         #animation-container {
@@ -310,20 +349,76 @@
             justify-content: center;
         }
     </style>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+        integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <img src="{% static 'logo.png' %}" class="logo">
+            <img src="{% static 'logo.png' %}" class="logo" onclick="window.location = '/'">
             <div id="profile-container">
-                <img id="profile-button" src="{% static 'noaccount.png' %}" class="profile-icon">
-                <div id="profile-menu" class="profile-menu">
-                    <button class="Sign-up-button" id="Sign-up">Sign up</button>
-                    <button class="Sign-up-button" id="clear-data">clear Data</button>
+                <div class="pro_sub">
+                    <img id="profile-button" src="{% static 'noaccount.png' %}" class="profile-icon">
+                    <span class="profile-username" id="profile-username">Guest</span>
+                    <button class="setting-button" id="setting-button"><img src="{% static 'settings.png' %}"></button>
+                </div>
+                <div class="settings" id="settings">
+                    <button class="logout-button" id="logout" onclick="window.location = '/signup'">Sign Up</button>
+                    <button class="logout-button" id="clear-data">Clear Data</button>
                 </div>
             </div>
+            <script>
+                var profile_container = document.getElementById('profile-container');
+                var profile_button = document.getElementById('profile-button');
+                var profile_username = document.getElementById('profile-username');
+                var setting_button = document.getElementById('setting-button');
+                var settings = document.getElementById('settings');
+
+                function profileButtonClickHandler(event) {
+                    event.stopPropagation();
+                    if (profile_container.classList.contains('expand')) {
+                        profile_container.classList.remove('expand');
+                        profile_username.classList.remove('show');
+                        setting_button.classList.remove('show');
+                    } else {
+                        profile_container.classList.add('expand');
+                        profile_username.classList.add('show');
+                        setting_button.classList.add('show');
+                    }
+                }
+
+                function settingButtonClickHandler(event) {
+                    event.stopPropagation();
+                    if (profile_container.classList.contains('expand-again')) {
+                        profile_button.addEventListener('click', profileButtonClickHandler);
+                        profile_container.classList.remove('expand-again');
+                        settings.classList.remove('show');
+                    } else {
+                        profile_button.removeEventListener('click', profileButtonClickHandler);
+                        profile_container.classList.add('expand-again');
+                        settings.classList.add('show');
+                    }
+                }
+
+                function documentClickHandler(event) {
+                    if (!profile_container.contains(event.target) && !profile_button.contains(event.target) && !setting_button.contains(event.target) && !settings.contains(event.target)) {
+                        profile_container.classList.remove('expand');
+                        profile_container.classList.remove('expand-again');
+                        profile_username.classList.remove('show');
+                        setting_button.classList.remove('show');
+                        settings.classList.remove('show');
+
+                        profile_button.addEventListener('click', profileButtonClickHandler);
+                    }
+                }
+
+                profile_button.addEventListener('click', profileButtonClickHandler);
+                setting_button.addEventListener('click', settingButtonClickHandler);
+                document.addEventListener('click', documentClickHandler);
+            </script>
+
         </div>
         <div class="chat-box" id="chat-box">
             <p id="h2">How can I help you today?</p>
@@ -348,21 +443,10 @@
     const chatBox = document.getElementById('chat-box');
     const form = document.getElementById('user-input');
     const user_input = document.getElementById('user-message');
-    const sign_up = document.getElementById('Sign-up');
     const clearData = document.getElementById('clear-data');
     const buttonContent = document.querySelector('.button-content');
     const animationContainer = document.getElementById('animation-container');
 
-    document.getElementById('profile-button').addEventListener('click', function () {
-        var menu = document.getElementById('profile-menu');
-        if (menu.classList.contains('show')) {
-            menu.classList.remove('show');
-            menu.style.animation = 'bounceOut 0.5s forwards';
-        } else {
-            menu.classList.add('show');
-            menu.style.animation = 'bounceIn 0.5s forwards';
-        }
-    });
 
     function loadAnimation() {
         animationContainer.style.display = 'flex';
@@ -376,7 +460,7 @@
     }
 
     form.addEventListener('submit', function (event) {
-        if (user_input.value != "") {
+        if (user_input.value) {
             const h2 = document.getElementById('h2');
             if (h2)
                 h2.style.display = 'none';
@@ -388,7 +472,7 @@
     });
 
     user_input.addEventListener('keydown', function (event) {
-        if (user_input.value != '') {
+        if (user_input.value) {
             if (event.key === 'Enter') {
                 const h2 = document.getElementById('h2');
                 h2.style.display = 'none';
@@ -403,9 +487,10 @@
     function handleFormSubmit(animationInstance) {
         const prompt = document.getElementById('user-message').value.trim();
 
-        if (prompt || image) {
+        if (prompt) {
             const formData = new FormData();
             formData.append('prompt', prompt);
+
             appendMessage('user', prompt);
             sendPrompt(formData, animationInstance);
 
@@ -438,7 +523,7 @@
 
         if (sender == "user") {
             const userIcon = document.createElement('img');
-            userIcon.src = "{% static 'account.png' %}";
+            userIcon.src = "{% static 'profile.png' %}";
             userIcon.classList.add('user-icon');
 
             const userMessage = document.createElement('div');
@@ -462,17 +547,12 @@
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    sign_up.addEventListener('click', function (event) {
-        window.location = "/signup";
-    });
-
     clearData.addEventListener('click', function (event) {
         event.preventDefault();
         chatBox.innerHTML = `<p id="h2">How can I help you today?</p>`;
         const h2 = document.getElementById('h2');
         h2.style.display = 'block';
     });
-
 </script>
 
 
