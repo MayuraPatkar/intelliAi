@@ -1,0 +1,22 @@
+@font-face {
+    font-family: 'Pixelify Sans';
+    src: url('./PixelifySans-Medium.ttf') format('truetype');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: url('./arrowhead-rounded-outline (1).svg'), auto;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Roboto", sans-serif;
+}

@@ -137,6 +137,11 @@
     .guest:active {
       opacity: 0.8;
     }
+
+    #animation-container-2 {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
   </style>
 </head>
 
@@ -152,7 +157,7 @@
         <div class="line"></div>
         <div class="line"></div>
       </div>
-      <a href="/signup" class="sign-up">Sign in</a>
+      <a href="/signup" class="sign-up">Sign up</a>
     </div>
     <div class="guestbutton">
       <a href="/guest" class='guest'>Create a guest account</a>
@@ -179,8 +184,9 @@
       });
 
       animation1.addEventListener('complete', function () {
-        document.getElementById('animation-container-2').style.display = 'block';
-        animation2.play();
+          document.getElementById('animation-container-2').style.display = 'block';
+          document.getElementById('animation-container-2').style.opacity = 1;
+          animation2.play();
       });
     });
   </script>

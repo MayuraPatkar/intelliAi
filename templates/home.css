@@ -1,0 +1,409 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: url("{% static 'arrowhead-rounded-outline (1).svg' %}"),
+    auto;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Roboto", sans-serif;
+}
+
+.container {
+    width: 90vw;
+    height: 90vh;
+    border-radius: 17px;
+    background: linear-gradient(148.6deg, rgba(214, 214, 214, 0.25) 0%, rgba(214, 214, 214, 0.025) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.header {
+    width: 90%;
+    height: 10%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo {
+    width: 150px;
+    height: 55px;
+}
+
+#profile-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: 2px solid #D6D6D61A;
+    display: grid;
+    align-items: center;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+    font-family: "Pixelify Sans", sans-serif;
+    transition: width 1s ease, height 1s ease, background-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+#profile-container:hover {
+    box-shadow: 0px 4px 4px 0px #00000040;
+    background-color: #D6D6D61A;
+}
+
+#profile-container.expand {
+    width: 200px;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: #D6D6D61A;
+}
+
+.pro_sub {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#profile-container.expand-again {
+    height: 250px;
+    background-color: #D6D6D61A;
+    flex-direction: column;
+    padding: 1%;
+}
+
+#profile-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    align-self: center;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+#profile-button img {
+    width: 100%;
+    height: 100%;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+.profile-username {
+    opacity: 0;
+    display: none;
+    transition: opacity 1s ease 5s;
+}
+
+.profile-username.show {
+    opacity: 1;
+    display: block;
+    transition-delay: 5s;
+}
+
+.setting-button {
+    border: 2px solid #555;
+    background-color: #D6D6D61A;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    color: #fff;
+    width: 40px;
+    opacity: 0;
+    height: 40px;
+    font-size: 0.9rem;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+    font-family: "Pixelify Sans", sans-serif;
+}
+
+.setting-button img {
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+.setting-button:hover {
+    background-color: #D6D6D61A;
+}
+
+.setting-button.show {
+    opacity: 1;
+    display: flex;
+}
+
+.settings {
+    display: none;
+}
+
+.settings.show {
+    width: 80%;
+    height: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.settings button {
+    border: 2px solid #555;
+    background-color: #D6D6D61A;
+    border-radius: 50px;
+    color: #fff;
+    width: 100%;
+    height: 40px;
+    font-size: 0.9rem;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+    font-family: "Pixelify Sans", sans-serif;
+}
+
+.chat-box {
+    width: 50vw;
+    height: 65vh;
+    color: white;
+    overflow-y: auto;
+}
+
+#h2 {
+    position: absolute;
+    top: 45%;
+    left: 35%;
+    font-size: 2rem;
+    font-family: "Pixelify Sans", sans-serif;
+    display: none;
+}
+
+.chat-box::-webkit-scrollbar {
+    width: 8px;
+    display: none;
+}
+
+.chat-box:hover::-webkit-scrollbar {
+    display: block;
+}
+
+.chat-box::-webkit-scrollbar-track {
+    background-color: #7E7E7E80;
+    border-radius: 50px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background-color: #7E7E7E;
+    border-radius: 50px;
+    border: 2px solid #7E7E7E80;
+}
+
+.chat-box::-webkit-scrollbar-thumb:hover {
+    background-color: #bbbbbb;
+}
+
+
+.user-message {
+    padding: 10px;
+    display: flex;
+    margin-top: 20px;
+    font-family: "Roboto", sans-serif;
+}
+
+.user-imageMessage {
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+@font-face {
+    font-family: 'Pixelify Sans';
+    src: url("{% static 'PixelifySans-Medium.ttf' %}") format('truetype');
+}
+
+.user-message p {
+    font-family: "Pixelify Sans", sans-serif;
+}
+
+.user-message img {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.ai-message {
+    padding: 10px;
+    display: flex;
+    font-family: "Roboto", sans-serif;
+}
+
+.ai-message img {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+
+.ai-message p {
+    font-family: "Pixelify Sans", sans-serif;
+}
+
+#user-input {
+    width: 50vw;
+    height: 6%;
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(148.6deg, rgba(214, 214, 214, 0.25) 0%, rgba(214, 214, 214, 0.025) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.123);
+    box-shadow: 0px 0px 1.99px 7.9px #FFFFFF1A;
+}
+
+#user-input>img {
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+input[type='text'] {
+    padding-left: 20px;
+    border-radius: 50px;
+    width: 63%;
+    height: 90%;
+    font-size: 1.1rem;
+    font-family: "Pixelify Sans", sans-serif;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: white;
+}
+
+.alltgr {
+    background: #D6D6D61A;
+    border-radius: 50px;
+    height: 99%;
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.abilities {
+    height: 80%;
+    width: 35%;
+    border-radius: 50px;
+    margin-left: 2%;
+    background: #D6D6D61A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input[type='file'] {
+    display: none;
+}
+
+.custom-file-label {
+    width: 50%;
+    height: 100%;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+.custom-file-label img {
+    width: 65%;
+    height: 110%;
+    object-fit: cover;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+.custom-file-label:hover {
+    background-color: #D6D6D61A;
+    ;
+}
+
+#startBtn {
+    width: 50%;
+    height: 100%;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+    background-color: transparent;
+    border: none;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+#startBtn img {
+    width: 70%;
+    height: 110%;
+    object-fit: cover;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+#startBtn:hover {
+    background-color: #D6D6D61A;
+}
+
+
+.input-with-image {
+    width: 50%;
+    height: 80%;
+    border-radius: 50px;
+    position: relative;
+    display: inline-block;
+}
+
+button[type="submit"] {
+    width: 60%;
+    height: 100%;
+    font-size: 1.1rem;
+    font-family: "Pixelify Sans", sans-serif;
+    background: radial-gradient(100% 1362.48% at 0% 0%, #7420D5 0%, #6C16E4 100%);
+    box-shadow: 0px 3.98px 1.99px 0px #FFFFFF40 inset;
+    box-shadow: 0px -7.97px 3.98px 0px #00000040 inset;
+    border: none;
+    border-radius: 50px;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+button[type="submit"]:hover {
+    background: radial-gradient(100% 1362.48% at 0% 0%, #8c28ff 0%, #7919ff 100%);
+}
+
+.submit-button img {
+    width: 25px;
+    height: 20px;
+    margin-left: 2px;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+.submit-button .button-content {
+    display: flex;
+    align-items: center;
+    cursor: url("{% static 'pointer-cursor.svg' %}"),
+    auto;
+}
+
+#animation-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
