@@ -19,7 +19,8 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Pixelify Sans', sans-serif;
-      cursor: url("{% static 'arrowhead-rounded-outline (1).svg' %}"), auto;
+      cursor: url("{% static 'arrowhead-rounded-outline (1).svg' %}"),
+      auto;
     }
 
     body {
@@ -204,12 +205,31 @@
       outline: none;
     }
 
+    .field-icon {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      position: absolute;
+      right: 54px;
+      top: 59%;
+      transform: translateY(-50%);
+      cursor: url("{% static 'pointer-cursor.svg' %}"),
+      auto;
+    }
+
+    .field-icon img {
+      width: 100%;
+      height: 100%;
+      cursor: url("{% static 'pointer-cursor.svg' %}"),
+      auto;
+    }
+
     .form input[type="email"]:hover,
     .form input[type="password"]:hover {
       background: linear-gradient(148.6deg, rgba(234, 234, 234, 0.855) 0%, rgba(214, 214, 214, 0) 100%);
     }
 
-    .form input[type="email"].alert{
+    .form input[type="email"].alert {
       border: 2px solid #F43434;
     }
 
@@ -217,7 +237,8 @@
     .form input[type="submit"] {
       background: rgba(255, 255, 255, 0.2);
       color: white;
-      cursor: url("{% static 'pointer-cursor.svg' %}"), auto;
+      cursor: url("{% static 'pointer-cursor.svg' %}"),
+      auto;
       transition: background-color 0.3s;
     }
 
@@ -229,7 +250,8 @@
       font-size: 0.8rem;
       color: white;
       text-decoration: none;
-      cursor: url("{% static 'pointer-cursor.svg' %}"), auto;
+      cursor: url("{% static 'pointer-cursor.svg' %}"),
+      auto;
     }
 
     .form p a:hover {
@@ -284,7 +306,22 @@
           email.classList.add("alert");
         </script>
         {% endif %}
-        <input type="password" placeholder="Password" name="password" required>
+        <input type="password" placeholder="Password" name="password" id="password" required>
+        <span class="field-icon toggle-password">
+          <img src="{% static 'eye-close.png' %}" alt="Toggle Password Visibility">
+        </span>
+        <script>
+          document.querySelector('.toggle-password').addEventListener('click', function () {
+            var passwordField = document.getElementById('password');
+            if (passwordField.type === 'password') {
+              passwordField.type = 'text';
+              this.querySelector('img').src = "{% static 'eye-open.png' %}";
+            } else {
+              passwordField.type = 'password';
+              this.querySelector('img').src = "{% static 'eye-close.png' %}";
+            }
+          });
+        </script>
         <input type="submit" value="Login">
         <p><a href="/signup">Don't have an account? Sign Up</a></p>
       </form>
