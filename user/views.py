@@ -118,7 +118,8 @@ def user_login(request):
             
             return response
         else:
-            return render(request, 'login.html', {'error_message': 'Invalid email or password.'})
+            messages.error(request, 'This email is not registered.')
+            return redirect('login')
     else:
         return render(request, 'login.html')
     
